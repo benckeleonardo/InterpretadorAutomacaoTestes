@@ -21,3 +21,6 @@ bin/
 # Ignore OS-specific files
 .DS_Store
 Thumbs.db
+
+# Arquivo temporario
+*.java~
