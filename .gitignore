@@ -1,0 +1,23 @@
+# Ignore the bin directory
+bin/
+
+# Ignore class files
+*.class
+
+# Ignore log files
+*.log
+
+# Ignore temporary files
+*.tmp
+*.temp
+
+# Ignore IntelliJ IDEA files
+.idea/
+*.iml
+
+# Ignore VS Code files
+.vscode/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
