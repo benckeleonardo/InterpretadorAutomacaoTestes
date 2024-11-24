@@ -11,7 +11,12 @@ public class Gerar {
             Runtime r = Runtime.getRuntime();
             Process p;            
             p = r.exec(new String[]{"java", "-jar", "../jflex-full-1.8.2.jar", "../scanner.flex"}, null, new File("src"));
-            System.out.println(p.waitFor());
+            if (p.waitFor() != 0) {
+                String errorTrace = new String(p.getErrorStream().readAllBytes());
+                System.out.println(errorTrace);
+            } else {
+                System.out.println("Scanner.java gerado com sucesso!");
+            }
 
             Path sourcePath = Paths.get("Scanner.java");
             Path destPath = Paths.get("src/Scanner.java");
@@ -19,7 +24,14 @@ public class Gerar {
             Files.move(sourcePath, destPath, StandardCopyOption.REPLACE_EXISTING);
 
             p = r.exec(new String[]{"java","-jar", "../java-cup-11b.jar", "-parser", "Parser", "-symbols", "Tokens", "../parser.cup"}, null, new File("src"));
-            System.out.println(p.waitFor());
+            if (p.waitFor() != 0) {
+                String errorTrace = new String(p.getErrorStream().readAllBytes());
+                System.out.println(errorTrace);
+            } else {
+                System.out.println("Parser.java gerado com sucesso!");
+            }
+
+
         }
         catch(Exception e) { 
             System.out.println(e.getMessage());

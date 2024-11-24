@@ -1,54 +1,119 @@
-/*Documentação: http://www2.cs.tum.edu/projects/cup/*/
+/*Documentação: http://www2.cs.tum.edu/projects/cup/ */
 import java_cup.runtime.*;
+import java.util.List;
+import java.util.ArrayList;
+
+import myPackage.Action;
+import myPackage.Block;
+import myPackage.BlockContent;
+import myPackage.Entry;
+import myPackage.Parameter;
+import myPackage.ParseResult;
 
 parser code {:
     // conectar esse parser ao scanner!
     Scanner s;
     Parser(Scanner s){ this.s=s; }
-
-    // tabela de símbolos
-    java.util.Map<String, Integer> simbolos = new java.util.HashMap<String, Integer>();
 :}
 
 /* conectar esse parser ao scanner! */
 init with {:  :};
 scan with {: return s.next_token(); :};
 
-/* Terminais (tokens retornados pelo scanner). */
-terminal            SEMI, MAIS, MENOS, VEZES, MENOSUNIT, LPAREN, RPAREN, ID, ATRIB;
-terminal Integer    NUMERO;        
+/* Terminals */
+terminal BLOCK_START, BLOCK_END;           // { }
+terminal EQUALS;                           // =
+terminal SEMICOLON;                        // ;
+terminal LPAREN, RPAREN;                   // ( )
+terminal String  STRING_LITERAL;           // "..."
+terminal String  IDENTIFIER;               // Identificador válido
+terminal String  BLOCK_TYPE;               // definicao_de_*
 
 /* Não terminais */
-non terminal            inicio;
-non terminal Integer    exp;      // utilizado para armazenar as subexpressões avaliadas
+non terminal Object              block;
+non terminal List<Object>        blocks;
+non terminal Object             block_content;
+non terminal List<Object>       block_contents;
+non terminal Object             entry;
+non terminal Object             action_def;
+non terminal List<Object>       actions;
+non terminal String             parameter;
+non terminal List<String>       parameters;
 
-/* Precedência de operadores */
-precedence left MAIS, MENOS;
-precedence left VEZES;
-
-/* Regras da Gramática 
-S ->  S E ;
-    | E ;
-
-E ->  E + E
-    | E - E
-    | E * E
-    | - E
-    | ( E )
-    | n
-    | i
-    | i = E
-*/
-inicio ::=   inicio exp:e SEMI       {: System.out.println(e);         :}
-           | exp:e SEMI              {: System.out.println(e);         :}
+/* Main block structure */
+block ::= 
+    BLOCK_TYPE:type IDENTIFIER:name BLOCK_START block_contents:contents BLOCK_END
+    {: 
+        RESULT = new Block(type, name, contents); 
+    :}
+    |
+    BLOCK_TYPE:type BLOCK_START block_contents:contents BLOCK_END
+    {: 
+        RESULT = new Block(type, null, contents); 
+    :}
 ;
 
-exp ::=   exp:e1 MAIS  exp:e2        {: RESULT = e1+e2;                :}
-        | exp:e1 MENOS exp:e2        {: RESULT = e1-e2;                :}
-        | exp:e1 VEZES exp:e2        {: RESULT = e1*e2;                :}
-        | MENOS exp:e                {: RESULT = -e;                   :}
-        | LPAREN exp:e RPAREN	     {: RESULT = e;                    :}
-        | NUMERO:n                   {: RESULT = n;                    :}
-        | ID:i	                     {: RESULT = simbolos.get(i);      :}
-        | ID:i ATRIB exp:e           {: simbolos.put(i.toString(), e);  :}
+/* Block contents can be nested blocks, entries, or actions */
+block_contents ::= 
+    block_contents:list block_content:content
+    {: 
+        list.add(content);
+        RESULT = list; 
+    :}
+    |
+    block_content:content
+    {: 
+        List<Object> list = new ArrayList<>();
+        list.add(content);
+        RESULT = list; 
+    :}
+;
+
+/* Block content can be another block, an entry, or an action */
+block_content ::=
+    block:b
+    {: RESULT = b; :}
+    |
+    entry:e
+    {: RESULT = e; :}
+    |
+    action_def:a
+    {: RESULT = a; :}
+;
+
+/* Simple key-value entry */
+entry ::= 
+    IDENTIFIER:key EQUALS STRING_LITERAL:value SEMICOLON
+    {: 
+        RESULT = new Entry(key, value); 
+    :}
+;
+
+/* Action with optional parameters */
+action_def ::=
+    IDENTIFIER:name LPAREN parameters:params RPAREN SEMICOLON
+    {: 
+        RESULT = new Action(name, params); 
+    :}
+    |
+    IDENTIFIER:name LPAREN RPAREN SEMICOLON
+    {: 
+        RESULT = new Action(name, new ArrayList<>()); 
+    :}
+;
+
+/* Parameter list */
+parameters ::=
+    parameters:list IDENTIFIER:param
+    {: 
+        list.add(param);
+        RESULT = list; 
+    :}
+    |
+    IDENTIFIER:param
+    {: 
+        List<String> list = new ArrayList<>();
+        list.add(param);
+        RESULT = list; 
+    :}
 ;

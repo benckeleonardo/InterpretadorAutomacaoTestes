@@ -6,31 +6,29 @@
 /** CUP generated class containing symbol constants. */
 public class Tokens {
   /* terminals */
-  public static final int MAIS = 3;
-  public static final int MENOS = 4;
-  public static final int SEMI = 2;
+  public static final int BLOCK_TYPE = 10;
+  public static final int STRING_LITERAL = 8;
   public static final int EOF = 0;
-  public static final int VEZES = 5;
-  public static final int NUMERO = 11;
-  public static final int ID = 9;
   public static final int error = 1;
-  public static final int RPAREN = 8;
-  public static final int LPAREN = 7;
-  public static final int MENOSUNIT = 6;
-  public static final int ATRIB = 10;
+  public static final int SEMICOLON = 5;
+  public static final int RPAREN = 7;
+  public static final int IDENTIFIER = 9;
+  public static final int BLOCK_END = 3;
+  public static final int EQUALS = 4;
+  public static final int BLOCK_START = 2;
+  public static final int LPAREN = 6;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
-  "SEMI",
-  "MAIS",
-  "MENOS",
-  "VEZES",
-  "MENOSUNIT",
+  "BLOCK_START",
+  "BLOCK_END",
+  "EQUALS",
+  "SEMICOLON",
   "LPAREN",
   "RPAREN",
-  "ID",
-  "ATRIB",
-  "NUMERO"
+  "STRING_LITERAL",
+  "IDENTIFIER",
+  "BLOCK_TYPE"
   };
 }
 

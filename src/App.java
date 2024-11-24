@@ -1,27 +1,82 @@
 import java.io.FileReader;
-
+import java.io.IOException;
 import java_cup.runtime.Symbol;
+import java.util.ArrayList;
+import java.util.List;
 
 public class App {
+    private static void printToken(Symbol token) {
+        String value = token.value != null ? token.value.toString() : "null";
+        System.out.printf("Token: <%d, %s> at position: %d\n", 
+            token.sym, value, token.left);
+    }
 
-    public static void main(String[] args) {
-        try {
-
-            Scanner scanner = new Scanner(new FileReader("entrada.txt"));
-            System.out.println("Análise Léxica: Lista de Tokens:");
-            Symbol s = scanner.next_token();
-            while(s.sym != Tokens.EOF){
-                System.out.printf("<%d, %s>\n", s.sym, s.value);
-                s = scanner.next_token();
+    private static void scanOnly(String filename) {
+        System.out.println("\n=== Fase de Análise Léxica ===");
+        try (FileReader reader = new FileReader(filename)) {
+            Scanner scanner = new Scanner(reader);
+            List<Symbol> tokens = new ArrayList<>();
+            
+            Symbol token;
+            while ((token = scanner.next_token()).sym != Tokens.EOF) {
+                tokens.add(token);
+                printToken(token);
             }
-
-            scanner = new Scanner(new FileReader("entrada.txt"));
-            Parser parser = new Parser(scanner);        
-            parser.parse(); 
-        }
-        catch(Exception e) { 
-            System.out.println(e.getMessage());
+            
+            System.out.printf("\nTotal tokens found: %d\n", tokens.size());
+            
+        } catch (IOException e) {
+            System.err.println("File Error: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Scanning Error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
-    
+
+    private static void parseOnly(String filename) {
+        System.out.println("\n=== Fase de Análise Sintática ===");
+        try (FileReader reader = new FileReader(filename)) {
+            Scanner scanner = new Scanner(reader);
+            Parser parser = new Parser(scanner);
+            
+            System.out.println("Starting parsing process...");
+            Object result = parser.parse().value;
+            
+            if (result != null) {
+                System.out.println("\nParsing successful!");
+                System.out.println("Parse Result:");
+                System.out.println(result.toString());
+            } else {
+                System.out.println("\nParsing completed but returned null result");
+            }
+            
+        } catch (IOException e) {
+            System.err.println("File Error: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Parsing Error: " + e.getMessage());
+            System.err.println("Stack trace:");
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        String filename = "entrada.txt";
+        
+        System.out.println("=== DSL Parser Debug Mode ===");
+        System.out.println("Input file: " + filename);
+        
+        try {
+            // First pass: Just scan and show tokens
+            scanOnly(filename);
+            
+            // Second pass: Full parsing
+            parseOnly(filename);
+            
+        } catch (Exception e) {
+            System.err.println("Fatal Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }

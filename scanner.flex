@@ -29,14 +29,29 @@ espaco = \t|\f|" "|\r|\n
 
 %%
 
-";"			{return new Symbol(Tokens.SEMI, yytext());}
-"="			{return new Symbol(Tokens.ATRIB, yytext());}
-"-"			{return new Symbol(Tokens.MENOS, yytext());}
-"+"			{return new Symbol(Tokens.MAIS, yytext());}
-"*"			{return new Symbol(Tokens.VEZES, yytext());}
-"("			{return new Symbol(Tokens.LPAREN, yytext());}
-")"			{return new Symbol(Tokens.RPAREN, yytext());}
-{id}		{return new Symbol(Tokens.ID, yytext());}
-{digito}+	{return new Symbol(Tokens.NUMERO, new Integer(yytext()));}
-{espaco}	{}
-.           { System.out.println("Caracter ilegal: " + yytext()); }
+/* Identificadores de blocos */
+"definicao_de_cenarios"       { return new Symbol(Tokens.BLOCK_TYPE, yytext()); }
+"definicao_de_configuracao"   { return new Symbol(Tokens.BLOCK_TYPE, yytext()); }
+"definicao_de_acoes"         { return new Symbol(Tokens.BLOCK_TYPE, yytext()); }
+"dados_entrada"              { return new Symbol(Tokens.BLOCK_TYPE, yytext()); }
+"acoes"                      { return new Symbol(Tokens.BLOCK_TYPE, yytext()); }
+"resultados_esperados"       { return new Symbol(Tokens.BLOCK_TYPE, yytext()); }
+
+/* operadores */
+"{"                          { return new Symbol(Tokens.BLOCK_START); }
+"}"                          { return new Symbol(Tokens.BLOCK_END); }
+"="                          { return new Symbol(Tokens.EQUALS); }
+";"                          { return new Symbol(Tokens.SEMICOLON); }
+"("                          { return new Symbol(Tokens.LPAREN); }
+")"                          { return new Symbol(Tokens.RPAREN); }
+
+/* Identificadores */
+\"[^\"]*\"                   { return new Symbol(Tokens.STRING_LITERAL, 
+                                     yytext().substring(1, yytext().length()-1)); }
+[a-zA-Z][a-zA-Z0-9_]*       { return new Symbol(Tokens.IDENTIFIER, yytext()); }
+
+/* Whitespace */
+[ \t\n\r\f]                  { /* Ignore whitespace */ }
+
+/* Invalid characters */
+.                            { System.out.println("Illegal character: " + yytext()); }
