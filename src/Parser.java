@@ -314,7 +314,7 @@ class CUP$Parser$actions {
 		String name = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
 		int paramsleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
 		int paramsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
-		List<String> params = (List<String>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
+		List<Parameter> params = (List<Parameter>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		 
         RESULT = new Action(name, params); 
     
@@ -339,15 +339,15 @@ class CUP$Parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 11: // parameters ::= parameters IDENTIFIER 
             {
-              List<String> RESULT =null;
+              List<Parameter> RESULT =null;
 		int listleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int listright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
-		List<String> list = (List<String>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
+		List<Parameter> list = (List<Parameter>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		int paramleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int paramright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String param = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		 
-        list.add(param);
+        list.add(new Parameter(param));
         RESULT = list; 
     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("parameters",8, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -357,13 +357,13 @@ class CUP$Parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 12: // parameters ::= IDENTIFIER 
             {
-              List<String> RESULT =null;
+              List<Parameter> RESULT =null;
 		int paramleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int paramright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String param = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		 
-        List<String> list = new ArrayList<>();
-        list.add(param);
+        List<Parameter> list = new ArrayList<>();
+        list.add(new Parameter(param));
         RESULT = list; 
     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("parameters",8, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);

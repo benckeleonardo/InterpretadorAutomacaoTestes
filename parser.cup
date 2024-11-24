@@ -38,7 +38,7 @@ non terminal Object             entry;
 non terminal Object             action_def;
 non terminal List<Object>       actions;
 non terminal String             parameter;
-non terminal List<String>       parameters;
+non terminal List<Parameter>    parameters;
 
 /* Main block structure */
 block ::= 
@@ -106,14 +106,14 @@ action_def ::=
 parameters ::=
     parameters:list IDENTIFIER:param
     {: 
-        list.add(param);
+        list.add(new Parameter(param));
         RESULT = list; 
     :}
     |
     IDENTIFIER:param
     {: 
-        List<String> list = new ArrayList<>();
-        list.add(param);
+        List<Parameter> list = new ArrayList<>();
+        list.add(new Parameter(param));
         RESULT = list; 
     :}
 ;
