@@ -70,10 +70,10 @@ class Scanner implements java_cup.runtime.Scanner {
     "\1\0\1\1\1\2\1\1\1\3\1\4\1\5\1\6"+
     "\7\7\1\10\1\11\1\0\1\12\24\7\1\13\1\7"+
     "\1\14\1\7\1\15\4\7\1\16\14\7\1\17\14\7"+
-    "\1\20\21\7\1\21\10\7\1\22\1\23\4\7";
+    "\1\20\21\7\1\21\10\7\1\22\1\23\4\7\1\24";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[107];
+    int [] result = new int[108];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -111,10 +111,10 @@ class Scanner implements java_cup.runtime.Scanner {
     "\0\u0797\0\u07b4\0\u07d1\0\u07ee\0\u080b\0\u0828\0\u0845\0\u0862"+
     "\0\u087f\0\u089c\0\u08b9\0\u08d6\0\127\0\u08f3\0\u0910\0\u092d"+
     "\0\u094a\0\u0967\0\u0984\0\u09a1\0\u09be\0\127\0\127\0\u09db"+
-    "\0\u09f8\0\u0a15\0\u0a32";
+    "\0\u09f8\0\u0a15\0\u0a32\0\127";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[107];
+    int [] result = new int[108];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -206,7 +206,7 @@ class Scanner implements java_cup.runtime.Scanner {
     "\1\150\3\11\10\0\1\11\2\0\2\11\1\151\17\11"+
     "\10\0\1\11\2\0\3\11\1\152\16\11\10\0\1\11"+
     "\2\0\2\11\1\153\17\11\10\0\1\11\2\0\14\11"+
-    "\1\147\5\11\2\0";
+    "\1\154\5\11\2\0";
 
   private static int [] zzUnpackTrans() {
     int [] result = new int[2639];
@@ -253,10 +253,10 @@ class Scanner implements java_cup.runtime.Scanner {
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
     "\1\0\2\11\1\1\4\11\7\1\2\11\1\0\1\11"+
-    "\130\1";
+    "\131\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[107];
+    int [] result = new int[108];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -740,97 +740,102 @@ class Scanner implements java_cup.runtime.Scanner {
             { System.out.println("Illegal character: " + yytext());
             }
             // fall through
-          case 20: break;
+          case 21: break;
           case 2:
             { /* Ignore whitespace */
             }
             // fall through
-          case 21: break;
+          case 22: break;
           case 3:
             { return new Symbol(Tokens.LPAREN);
             }
             // fall through
-          case 22: break;
+          case 23: break;
           case 4:
             { return new Symbol(Tokens.RPAREN);
             }
             // fall through
-          case 23: break;
+          case 24: break;
           case 5:
             { return new Symbol(Tokens.SEMICOLON);
             }
             // fall through
-          case 24: break;
+          case 25: break;
           case 6:
             { return new Symbol(Tokens.EQUALS);
             }
             // fall through
-          case 25: break;
+          case 26: break;
           case 7:
             { return new Symbol(Tokens.IDENTIFIER, yytext());
             }
             // fall through
-          case 26: break;
+          case 27: break;
           case 8:
             { return new Symbol(Tokens.LBRACE);
             }
             // fall through
-          case 27: break;
+          case 28: break;
           case 9:
             { return new Symbol(Tokens.RBRACE);
             }
             // fall through
-          case 28: break;
+          case 29: break;
           case 10:
             { return new Symbol(Tokens.STRING_LITERAL,yytext().substring(1, yytext().length()-1));
             }
             // fall through
-          case 29: break;
+          case 30: break;
           case 11:
             { return new Symbol(Tokens.NOME, yytext());
             }
             // fall through
-          case 30: break;
+          case 31: break;
           case 12:
             { return new Symbol(Tokens.IDENTIFICADOR_ACAO_TIPO, yytext());
             }
             // fall through
-          case 31: break;
+          case 32: break;
           case 13:
             { return new Symbol(Tokens.ACOES, yytext());
             }
             // fall through
-          case 32: break;
+          case 33: break;
           case 14:
             { return new Symbol(Tokens.IDENTIFICADOR_ACAO, yytext());
             }
             // fall through
-          case 33: break;
+          case 34: break;
           case 15:
             { return new Symbol(Tokens.IDENTIFICADOR_CENARIO, yytext());
             }
             // fall through
-          case 34: break;
+          case 35: break;
           case 16:
             { return new Symbol(Tokens.DADOS_ENTRADA, yytext());
             }
             // fall through
-          case 35: break;
+          case 36: break;
           case 17:
             { return new Symbol(Tokens.BLOCK_TYPE_ACTION, yytext());
             }
             // fall through
-          case 36: break;
+          case 37: break;
           case 18:
             { return new Symbol(Tokens.RESULTADOS_ESPERADOS, yytext());
             }
             // fall through
-          case 37: break;
+          case 38: break;
           case 19:
-            { return new Symbol(Tokens.BLOCK_TYPE, yytext());
+            { return new Symbol(Tokens.BLOCK_TYPE_CENARIOS, yytext());
             }
             // fall through
-          case 38: break;
+          case 39: break;
+          case 20:
+            { return new Symbol(Tokens.BLOCK_TYPE_CONFIGURACAO, yytext());
+            }
+            // fall through
+          case 40: break;
           default:
             zzScanError(ZZ_NO_MATCH);
         }

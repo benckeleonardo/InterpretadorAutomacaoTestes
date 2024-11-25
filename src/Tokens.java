@@ -6,27 +6,29 @@
 /** CUP generated class containing symbol constants. */
 public class Tokens {
   /* terminals */
-  public static final int IDENTIFICADOR_CENARIO = 14;
-  public static final int NOME = 13;
+  public static final int IDENTIFICADOR_CENARIO = 16;
+  public static final int NOME = 15;
   public static final int SEMICOLON = 5;
   public static final int BLOCK_TYPE_ACTION = 12;
   public static final int RBRACE = 3;
   public static final int RPAREN = 7;
   public static final int IDENTIFICADOR_ACAO = 10;
-  public static final int IDENTIFIER = 20;
-  public static final int CENARIO_DADOS_ENTRADA = 17;
+  public static final int IDENTIFIER = 22;
+  public static final int BLOCK_TYPE_CONFIGURACAO = 14;
+  public static final int CENARIO_DADOS_ENTRADA = 19;
   public static final int LPAREN = 6;
   public static final int LBRACE = 2;
   public static final int STRING_LITERAL = 8;
-  public static final int ACOES = 19;
+  public static final int BLOCK_TYPE_CENARIOS = 13;
+  public static final int ACOES = 21;
   public static final int EQUALS = 4;
   public static final int EOF = 0;
-  public static final int CENARIO_ACOES = 15;
+  public static final int CENARIO_ACOES = 17;
   public static final int error = 1;
-  public static final int DADOS_ENTRADA = 18;
+  public static final int DADOS_ENTRADA = 20;
   public static final int IDENTIFICADOR_ACAO_TIPO = 11;
   public static final int BLOCK_TYPE = 9;
-  public static final int RESULTADOS_ESPERADOS = 16;
+  public static final int RESULTADOS_ESPERADOS = 18;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -41,6 +43,8 @@ public class Tokens {
   "IDENTIFICADOR_ACAO",
   "IDENTIFICADOR_ACAO_TIPO",
   "BLOCK_TYPE_ACTION",
+  "BLOCK_TYPE_CENARIOS",
+  "BLOCK_TYPE_CONFIGURACAO",
   "NOME",
   "IDENTIFICADOR_CENARIO",
   "CENARIO_ACOES",

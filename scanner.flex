@@ -31,15 +31,11 @@ identificador = [a-zA-Z][a-zA-Z0-9_]*
 %%
 
 /* Identificadores de blocos */
-"definicao_de_cenarios"       { return new Symbol(Tokens.BLOCK_TYPE, yytext()); }
-"definicao_de_configuracao"   { return new Symbol(Tokens.BLOCK_TYPE, yytext()); }
-/*"definicao_de_acoes"         { return new Symbol(Tokens.BLOCK_TYPE, yytext()); } */
-
+"definicao_de_cenarios"       { return new Symbol(Tokens.BLOCK_TYPE_CENARIOS, yytext()); }
+"definicao_de_configuracao"   { return new Symbol(Tokens.BLOCK_TYPE_CONFIGURACAO, yytext()); }
 "definicao_de_acoes"         { return new Symbol(Tokens.BLOCK_TYPE_ACTION, yytext()); }
 "tipo"					     { return new Symbol(Tokens.IDENTIFICADOR_ACAO_TIPO, yytext()); }
 "dados_entrada"			     { return new Symbol(Tokens.DADOS_ENTRADA, yytext()); }
-
-"dados_entrada"              { return new Symbol(Tokens.BLOCK_TYPE, yytext()); }
 "acoes"                      { return new Symbol(Tokens.ACOES, yytext()); }
 "resultados_esperados"       { return new Symbol(Tokens.RESULTADOS_ESPERADOS, yytext()); }
 

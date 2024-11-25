@@ -1,4 +1,4 @@
 definicao_de_configuracao {
     ambiente = "teste";
     url_base = "https://www.example.com/";
-}
+};

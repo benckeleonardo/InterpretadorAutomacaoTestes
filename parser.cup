@@ -46,6 +46,8 @@ terminal String  BLOCK_TYPE;         // definicao_de_*
 terminal String IDENTIFICADOR_ACAO; // Identificador de ação
 terminal String IDENTIFICADOR_ACAO_TIPO; // Identificador do tipo de acao
 terminal String BLOCK_TYPE_ACTION;   // Bloco de ações
+terminal String BLOCK_TYPE_CENARIOS;  // Bloco de cenários  
+terminal String BLOCK_TYPE_CONFIGURACAO; // Bloco de configuração
 
 terminal String  NOME;                             // Identificador de nome genérico
 
@@ -72,7 +74,7 @@ non terminal String             parameter;
 non terminal List<Parameter>    parameters;
 
 non terminal Object             cenario;
-non terminal List<Cenario>      cenarios;
+// non terminal List<Cenario>      cenarios;
 
 non terminal List<Action>       acoesCenario;
 non terminal List<Action>       definicao_de_acoes;
@@ -91,7 +93,46 @@ non terminal Configuracao       configuracao; // HashMap passando para a classe 
 non terminal HashMap<String, String> acao;
 
 
+// CONFIGURAÇÔES INICIO
+
+/*
+definicao_de_configuracao {
+    ambiente = "teste";
+    url_base = "https://www.example.com/";
+}
+*/
+
+configuracao ::= 
+    BLOCK_TYPE_CONFIGURACAO LBRACE 
+        IDENTIFIER:key EQUALS STRING_LITERAL:value SEMICOLON
+        {:
+            System.out.println("Bloco de configuração reconhecido!");
+            // Adiciona a nova chave e valor ao mapa existente
+            paramsConfiguracao.put(key, value);
+            RESULT = paramsConfiguracao;
+        :}
+        |
+        IDENTIFIER:key EQUALS STRING_LITERAL:value SEMICOLON
+        {:
+            System.out.println("Bloco de configuração reconhecido!");
+            // Cria um novo mapa e adiciona o primeiro par chave-valor
+            HashMap<String, String> paramsConfiguracao = new HashMap<>();
+
+            paramsConfiguracao.put(key, value);
+            RESULT = paramsConfiguracao;
+        :}
+    RBRACE
+    {:
+        System.out.println("Bloco de configuração reconhecido!");
+    :}
+;
+// CONFIGURAÇÔES FIM
+
+
+// @todo - Arrancar fora o BLOCK_TYPE
+
 /* Main block structure */
+/*
 block ::= 
     BLOCK_TYPE:type IDENTIFIER:name LBRACE block_contents:contents RBRACE
     {: 
@@ -103,6 +144,8 @@ block ::=
         RESULT = new Block(type, null, contents); 
     :}
 ;
+*/
+
 
 // bloco de acao_
 acao ::= 
@@ -110,29 +153,31 @@ acao ::=
         IDENTIFICADOR_ACAO_TIPO:type EQUALS STRING_LITERAL:tipo SEMICOLON
         {:
             // acao sem parametro
-            // System.out.println("Bloco de ações reconhecido!");
+            System.out.println("Bloco de ações reconhecido!");
 
             HashMap<String, String> acao = new HashMap<>();
             acao.put("name", name);
             acao.put("tipo", tipo);
             RESULT = acao;
         :}
+        /*
         |
         IDENTIFICADOR_ACAO:name LBRACE 
             IDENTIFICADOR_ACAO_TIPO:type EQUALS STRING_LITERAL:tipo SEMICOLON
             {:
                 // vai ter parametro
-                // System.out.println("Bloco de ações reconhecido!");
+                System.out.println("Bloco de ações reconhecido!");
 
                 HashMap<String, String> acao = new HashMap<>();
                 acao.put("name", name);
                 acao.put("tipo", tipo);
                 RESULT = acao;
             :}
-        /*{ / Outras ações opcionais podem ser adicionadas aqui / }*/
+        { / Outras ações opcionais podem ser adicionadas aqui / }
     {: 
-        RESULT = new Action(name, new ArrayList<>()); 
+        RESULT = new Action(name);
     :}
+    */
 ;
 
 /* Bloco de definição de ações */
@@ -173,6 +218,7 @@ cenario ::=
         BlocoAcoesCenario:acoesCenario
         BlocoResultadosEsperados:resultadosEsperados
         {:
+            System.out.println("Bloco de cenário reconhecido!");
             cenarios.add(new Cenario(name, dadosEntrada, acoesCenario, resultadosEsperados));
         :}
 ;
@@ -192,23 +238,27 @@ BlocoAcoesCenario ::=
     ACOES EQUALS LBRACE 
         IDENTIFIER:name LPAREN RPAREN SEMICOLON
         {:
+
+            paramsTeste1 = new ArrayList<>();
             // acao sem parametro
             // System.out.println("Bloco de ações reconhecido!");
 
             HashMap<String, String> acao = new HashMap<>();
             acao.put("name", name);
-            acao.put("params", params);
+            acao.put("params", paramsTeste1);
             RESULT = acao;
         :}
         |
-        IDENTIFIER:name LPAREN IDENTIFIER:params RPAREN SEMICOLON 
+        IDENTIFIER:name LPAREN IDENTIFIER:paramsTeste3 RPAREN SEMICOLON 
         {:
             // vai ter parametro
             // System.out.println("Bloco de ações reconhecido!");
+            
+            paramsTeste2 = new ArrayList<>();
 
             HashMap<String, String> acao = new HashMap<>();
             acao.put("name", name);
-            acao.put("params", params);
+            acao.put("params", paramsTeste2);
             RESULT = acao;
         :}
     RBRACE 
@@ -223,28 +273,29 @@ BlocoAcoesCenario ::=
 
 DadosEntrada ::= 
     DADOS_ENTRADA EQUALS LBRACE 
-        parametrosDadosEntrada:params
+        parametrosDadosEntrada:paramsDadosEntrada
     RBRACE 
     {:
         // Cria o mapa de dados de entrada diretamente do resultado dos parâmetros
-        RESULT = params;
+        RESULT = paramsDadosEntrada;
     :}
 ;
 
 parametrosDadosEntrada ::= 
-    parametrosDadosEntrada:params IDENTIFIER:key EQUALS STRING_LITERAL:value SEMICOLON
+    parametrosDadosEntrada:paramsEntrada IDENTIFIER:key EQUALS STRING_LITERAL:value SEMICOLON
     {:
         // Adiciona a nova chave e valor ao mapa existente
-        params.put(key, value);
-        RESULT = params;
+        paramsEntrada.put(key, value);
+        RESULT = paramsEntrada;
     :}
     |
     IDENTIFIER:key EQUALS STRING_LITERAL:value SEMICOLON
     {:
         // Cria um novo mapa e adiciona o primeiro par chave-valor
-        HashMap<String, String> params = new HashMap<>();
-        params.put(key, value);
-        RESULT = params;
+        HashMap<String, String> paramsEntrada = new HashMap<>();
+
+        paramsEntrada.put(key, value);
+        RESULT = paramsEntrada;
     :}
 ;
 
@@ -260,7 +311,10 @@ BlocoResultadosEsperados ::=
         IDENTIFIER LPAREN RPAREN SEMICOLON 
         IDENTIFIER LPAREN RPAREN SEMICOLON 
     RBRACE 
-    {: System.out.println("Bloco de resultados esperados reconhecido!"); :};
+    {:
+        System.out.println("Bloco de resultados esperados reconhecido!");
+    :}
+;
 
 /* Block contents can be nested blocks, entries, or actions */
 block_contents ::= 
@@ -300,14 +354,14 @@ entry ::=
 
 /* Action with optional parameters */
 action_def ::=
-    IDENTIFIER:name LPAREN parameters:params RPAREN SEMICOLON
+    IDENTIFIER:name LPAREN parameters:paramsActionDef RPAREN SEMICOLON
     {: 
-        RESULT = new Action(name, params); 
+        RESULT = new Action(name);
     :}
     |
     IDENTIFIER:name LPAREN RPAREN SEMICOLON
     {: 
-        RESULT = new Action(name, new ArrayList<>()); 
+        RESULT = new Action(name); 
     :}
 ;
 
