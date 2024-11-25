@@ -40,15 +40,15 @@ public class App {
             Scanner scanner = new Scanner(reader);
             Parser parser = new Parser(scanner);
             
-            System.out.println("Starting parsing process...");
+            System.out.println("Iniciando análise sintática...");
             Object result = parser.parse().value;
             
             if (result != null) {
-                System.out.println("\nParsing successful!");
-                System.out.println("Parse Result:");
+                System.out.println("\nParse completado com sucesso!");
+                System.out.println("Resultado do parse:\n");
                 System.out.println(result.toString());
             } else {
-                System.out.println("\nParsing completed but returned null result");
+                System.out.println("\nParse completou e retornou null.");
             }
             
         } catch (IOException e) {
@@ -63,9 +63,8 @@ public class App {
 
     public static void main(String[] args) {
         String filename = "entrada.txt";
-        
-        System.out.println("=== DSL Parser Debug Mode ===");
-        System.out.println("Input file: " + filename);
+
+        System.out.println("Arquivo de entrada: " + filename);
         
         try {
             // First pass: Just scan and show tokens

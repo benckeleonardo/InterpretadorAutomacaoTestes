@@ -1,12 +1,13 @@
 package myPackage;
+
 import java.util.ArrayList;
 import java.util.List;
 
 // Main parser result class to hold the entire parsed structure
-public class ParseResult {
+public class SeleniumGenerator {
     private List<Block> blocks;
     
-    public ParseResult(List<Block> blocks) {
+    public SeleniumGenerator(List<Block> blocks) {
         this.blocks = blocks != null ? blocks : new ArrayList<>();
     }
     
@@ -18,8 +19,6 @@ public class ParseResult {
         }
         return sb.toString();
     }
-
-    
 
     // Helper method to find specific block types
     public List<Block> getBlocksByType(String type) {

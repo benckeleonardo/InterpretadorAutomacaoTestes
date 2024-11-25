@@ -33,18 +33,27 @@ identificador = [a-zA-Z][a-zA-Z0-9_]*
 /* Identificadores de blocos */
 "definicao_de_cenarios"       { return new Symbol(Tokens.BLOCK_TYPE, yytext()); }
 "definicao_de_configuracao"   { return new Symbol(Tokens.BLOCK_TYPE, yytext()); }
-"definicao_de_acoes"         { return new Symbol(Tokens.BLOCK_TYPE, yytext()); }
+/*"definicao_de_acoes"         { return new Symbol(Tokens.BLOCK_TYPE, yytext()); } */
+
+"definicao_de_acoes"         { return new Symbol(Tokens.BLOCK_TYPE_ACTION, yytext()); }
+"tipo"					     { return new Symbol(Tokens.IDENTIFICADOR_ACAO_TIPO, yytext()); }
+"dados_entrada"			     { return new Symbol(Tokens.DADOS_ENTRADA, yytext()); }
+
 "dados_entrada"              { return new Symbol(Tokens.BLOCK_TYPE, yytext()); }
-"acoes"                      { return new Symbol(Tokens.BLOCK_TYPE, yytext()); }
-"resultados_esperados"       { return new Symbol(Tokens.BLOCK_TYPE, yytext()); }
+"acoes"                      { return new Symbol(Tokens.ACOES, yytext()); }
+"resultados_esperados"       { return new Symbol(Tokens.RESULTADOS_ESPERADOS, yytext()); }
 
 // Identificador de cenario (procura string cenario_[a-zA-Z0-9_]* { )
 cenario_{identificador}       { return new Symbol(Tokens.IDENTIFICADOR_CENARIO, yytext()); }
 acao_{identificador}          { return new Symbol(Tokens.IDENTIFICADOR_ACAO, yytext()); }
 
+
+// Identificador genérico de nome
+"nome"						{ return new Symbol(Tokens.NOME, yytext()); }
+
 /* operadores */
-"{"                          { return new Symbol(Tokens.BLOCK_START); }
-"}"                          { return new Symbol(Tokens.BLOCK_END); }
+"{"                          { return new Symbol(Tokens.LBRACE); }
+"}"                          { return new Symbol(Tokens.RBRACE); }
 "="                          { return new Symbol(Tokens.EQUALS); }
 ";"                          { return new Symbol(Tokens.SEMICOLON); }
 "("                          { return new Symbol(Tokens.LPAREN); }

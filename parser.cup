@@ -9,6 +9,9 @@ import myPackage.BlockContent;
 import myPackage.Entry;
 import myPackage.Parameter;
 import myPackage.ParseResult;
+import myPackage.Cenario;
+
+import myPackage.Programa; // classe que vai guardar os blocos de ação e cenários, pra gerar o código final
 
 parser code {:
     // conectar esse parser ao scanner!
@@ -16,45 +19,248 @@ parser code {:
     Parser(Scanner s){ this.s=s; }
 :}
 
+/*
+start with programa;
+
+programa ::= 
+    definicaoCenarios configuracao testeCompleto actions
+    {: 
+        RESULT = new Programa(cenarios, configuracao, testeCompleto, actions);
+    :}
+;
+*/
+
 /* conectar esse parser ao scanner! */
 init with {:  :};
 scan with {: return s.next_token(); :};
 
 /* Terminals */
-terminal BLOCK_START, BLOCK_END;           // { }
-terminal EQUALS;                           // =
-terminal SEMICOLON;                        // ;
-terminal LPAREN, RPAREN;                   // ( )
-terminal String  STRING_LITERAL;           // "..."
-terminal String  BLOCK_TYPE;               // definicao_de_*
-terminal String  IDENTIFICADOR_ACAO;       // Identificador de ação
-terminal String  IDENTIFICADOR_CENARIO;    // Identificador de cenario
-terminal String  IDENTIFICADOR_ACAO_CLICAR; // Identificador de ação clicar
-terminal String  IDENTIFIER;               // Identificador válido
+terminal LBRACE, RBRACE;             // { }
+terminal EQUALS;                     // =
+terminal SEMICOLON;                  // ;
+terminal LPAREN, RPAREN;             // ( )
+terminal String  STRING_LITERAL;     // "..."
+terminal String  BLOCK_TYPE;         // definicao_de_*
+
+
+terminal String IDENTIFICADOR_ACAO; // Identificador de ação
+terminal String IDENTIFICADOR_ACAO_TIPO; // Identificador do tipo de acao
+terminal String BLOCK_TYPE_ACTION;   // Bloco de ações
+
+terminal String  NOME;                             // Identificador de nome genérico
+
+terminal String  IDENTIFICADOR_CENARIO;            // Identificador de cenario
+terminal String  CENARIO_ACOES;                    // Identificador de cenario
+terminal String  RESULTADOS_ESPERADOS;             // Identificador RESULTADOS_ESPERADOS de cenario
+terminal String  CENARIO_DADOS_ENTRADA;            // Identificador de cenario
+
+terminal String  DADOS_ENTRADA;                    // Identificador de dados de entrada
+terminal String  ACOES;                            // Identificador de ações
+
+terminal String  IDENTIFIER;                // Identificador válido
 
 /* Não terminais */
-non terminal Object              block;
-non terminal List<Object>        blocks;
+non terminal Object             block;
+non terminal List<Object>       blocks;
 non terminal Object             block_content;
 non terminal List<Object>       block_contents;
 non terminal Object             entry;
 non terminal Object             action_def;
-non terminal List<Object>       actions;
+/*non terminal List<Object>       actions; */
+non terminal List<Action>       actions;
 non terminal String             parameter;
 non terminal List<Parameter>    parameters;
 
+non terminal Object             cenario;
+non terminal List<Cenario>      cenarios;
+
+non terminal List<Action>       acoesCenario;
+non terminal List<Action>       definicao_de_acoes;
+non terminal List<Action>       lista_acoes_definicao;
+
+// CENARIO INICIO
+non terminal HashMap<String, String> DadosEntrada;
+non terminal HashMap<String, String> parametrosDadosEntrada;
+non terminal HashMap<String, String> BlocoAcoesCenario;
+non terminal HashMap<String, String> BlocoResultadosEsperados;
+// CENARIO FIM
+
+non terminal Configuracao       configuracao; // HashMap passando para a classe Programa
+                                              // Ou instancia como uma classe e passa pra classe Programa
+
+non terminal HashMap<String, String> acao;
+
+
 /* Main block structure */
 block ::= 
-    BLOCK_TYPE:type IDENTIFIER:name BLOCK_START block_contents:contents BLOCK_END
+    BLOCK_TYPE:type IDENTIFIER:name LBRACE block_contents:contents RBRACE
     {: 
         RESULT = new Block(type, name, contents); 
     :}
     |
-    BLOCK_TYPE:type BLOCK_START block_contents:contents BLOCK_END
+    BLOCK_TYPE:type LBRACE block_contents:contents RBRACE
     {: 
         RESULT = new Block(type, null, contents); 
     :}
 ;
+
+// bloco de acao_
+acao ::= 
+    IDENTIFICADOR_ACAO:name LBRACE 
+        IDENTIFICADOR_ACAO_TIPO:type EQUALS STRING_LITERAL:tipo SEMICOLON
+        {:
+            // acao sem parametro
+            // System.out.println("Bloco de ações reconhecido!");
+
+            HashMap<String, String> acao = new HashMap<>();
+            acao.put("name", name);
+            acao.put("tipo", tipo);
+            RESULT = acao;
+        :}
+        |
+        IDENTIFICADOR_ACAO:name LBRACE 
+            IDENTIFICADOR_ACAO_TIPO:type EQUALS STRING_LITERAL:tipo SEMICOLON
+            {:
+                // vai ter parametro
+                // System.out.println("Bloco de ações reconhecido!");
+
+                HashMap<String, String> acao = new HashMap<>();
+                acao.put("name", name);
+                acao.put("tipo", tipo);
+                RESULT = acao;
+            :}
+        /*{ / Outras ações opcionais podem ser adicionadas aqui / }*/
+    {: 
+        RESULT = new Action(name, new ArrayList<>()); 
+    :}
+;
+
+/* Bloco de definição de ações */
+definicao_de_acoes ::= 
+    BLOCK_TYPE_ACTION LBRACE lista_acoes_definicao:actions RBRACE
+    {: 
+        System.out.println("Bloco de definição de ações processado: " + actions);
+        RESULT = actions; 
+    :}
+;
+
+/* Lista de ações */
+lista_acoes_definicao ::= 
+    lista_acoes_definicao:actions acao:action
+    {: 
+        System.out.println("Adicionando ação à lista existente: " + action);
+        actions.add(action);
+        System.out.println("Lista atual de ações: " + actions);
+        RESULT = actions; 
+    :}
+    |
+    acao:action
+    {: 
+        System.out.println("Criando nova lista de ações com a primeira ação: " + action);
+        List<Action> actions = new ArrayList<>();
+        actions.add(action);
+        System.out.println("Lista inicial de ações: " + actions);
+        RESULT = actions; 
+    :}
+;
+
+
+// bloco de cenario
+cenario ::= 
+    IDENTIFICADOR_CENARIO:name LBRACE
+        NOME EQUALS STRING_LITERAL:nome SEMICOLON
+        DadosEntrada:dadosEntrada
+        BlocoAcoesCenario:acoesCenario
+        BlocoResultadosEsperados:resultadosEsperados
+        {:
+            cenarios.add(new Cenario(name, dadosEntrada, acoesCenario, resultadosEsperados));
+        :}
+;
+
+
+/*
+Exemplo BlocoAcoesCenario
+        acoes = {
+            acessar_tela_login();
+            preencher_campo_usuario(usuario);
+            preencher_campo_senha(senha);
+            clicar_botao_login();
+        };
+*/
+
+BlocoAcoesCenario ::= 
+    ACOES EQUALS LBRACE 
+        IDENTIFIER:name LPAREN RPAREN SEMICOLON
+        {:
+            // acao sem parametro
+            // System.out.println("Bloco de ações reconhecido!");
+
+            HashMap<String, String> acao = new HashMap<>();
+            acao.put("name", name);
+            acao.put("params", params);
+            RESULT = acao;
+        :}
+        |
+        IDENTIFIER:name LPAREN IDENTIFIER:params RPAREN SEMICOLON 
+        {:
+            // vai ter parametro
+            // System.out.println("Bloco de ações reconhecido!");
+
+            HashMap<String, String> acao = new HashMap<>();
+            acao.put("name", name);
+            acao.put("params", params);
+            RESULT = acao;
+        :}
+    RBRACE 
+    {: System.out.println("Bloco de ações reconhecido!"); :};
+
+/* exemplo DadosEntrada:
+    dados_entrada = {
+        usuario = "usuario@example.com";
+        senha = "senha123";
+    };
+*/
+
+DadosEntrada ::= 
+    DADOS_ENTRADA EQUALS LBRACE 
+        parametrosDadosEntrada:params
+    RBRACE 
+    {:
+        // Cria o mapa de dados de entrada diretamente do resultado dos parâmetros
+        RESULT = params;
+    :}
+;
+
+parametrosDadosEntrada ::= 
+    parametrosDadosEntrada:params IDENTIFIER:key EQUALS STRING_LITERAL:value SEMICOLON
+    {:
+        // Adiciona a nova chave e valor ao mapa existente
+        params.put(key, value);
+        RESULT = params;
+    :}
+    |
+    IDENTIFIER:key EQUALS STRING_LITERAL:value SEMICOLON
+    {:
+        // Cria um novo mapa e adiciona o primeiro par chave-valor
+        HashMap<String, String> params = new HashMap<>();
+        params.put(key, value);
+        RESULT = params;
+    :}
+;
+
+/*
+        resultados = {
+            tela_principal_deve_estar_visivel();
+            mensagem_de_bem_vindo_deve_ser_exibida();
+        };
+*/
+
+BlocoResultadosEsperados ::= 
+    RESULTADOS_ESPERADOS EQUALS LBRACE 
+        IDENTIFIER LPAREN RPAREN SEMICOLON 
+        IDENTIFIER LPAREN RPAREN SEMICOLON 
+    RBRACE 
+    {: System.out.println("Bloco de resultados esperados reconhecido!"); :};
 
 /* Block contents can be nested blocks, entries, or actions */
 block_contents ::= 
