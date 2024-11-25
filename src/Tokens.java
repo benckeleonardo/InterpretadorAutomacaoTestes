@@ -6,13 +6,15 @@
 /** CUP generated class containing symbol constants. */
 public class Tokens {
   /* terminals */
-  public static final int BLOCK_TYPE = 10;
+  public static final int BLOCK_TYPE = 9;
   public static final int STRING_LITERAL = 8;
   public static final int EOF = 0;
+  public static final int IDENTIFICADOR_CENARIO = 11;
   public static final int error = 1;
   public static final int SEMICOLON = 5;
   public static final int RPAREN = 7;
-  public static final int IDENTIFIER = 9;
+  public static final int IDENTIFIER = 13;
+  public static final int IDENTIFICADOR_ACAO = 10;
   public static final int BLOCK_END = 3;
   public static final int EQUALS = 4;
   public static final int BLOCK_START = 2;
@@ -27,8 +29,11 @@ public class Tokens {
   "LPAREN",
   "RPAREN",
   "STRING_LITERAL",
-  "IDENTIFIER",
-  "BLOCK_TYPE"
+  "BLOCK_TYPE",
+  "IDENTIFICADOR_ACAO",
+  "IDENTIFICADOR_CENARIO",
+  "IDENTIFICADOR_ACAO_CLICAR",
+  "IDENTIFIER"
   };
 }
 

@@ -26,8 +26,11 @@ terminal EQUALS;                           // =
 terminal SEMICOLON;                        // ;
 terminal LPAREN, RPAREN;                   // ( )
 terminal String  STRING_LITERAL;           // "..."
-terminal String  IDENTIFIER;               // Identificador válido
 terminal String  BLOCK_TYPE;               // definicao_de_*
+terminal String  IDENTIFICADOR_ACAO;       // Identificador de ação
+terminal String  IDENTIFICADOR_CENARIO;    // Identificador de cenario
+terminal String  IDENTIFICADOR_ACAO_CLICAR; // Identificador de ação clicar
+terminal String  IDENTIFIER;               // Identificador válido
 
 /* Não terminais */
 non terminal Object              block;

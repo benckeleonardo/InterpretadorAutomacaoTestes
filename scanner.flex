@@ -26,6 +26,7 @@ digito = [0-9]
 letra = [a-zA-Z]
 id = {letra}({letra}|{digito}|"_")*
 espaco = \t|\f|" "|\r|\n
+identificador = [a-zA-Z][a-zA-Z0-9_]*
 
 %%
 
@@ -37,6 +38,10 @@ espaco = \t|\f|" "|\r|\n
 "acoes"                      { return new Symbol(Tokens.BLOCK_TYPE, yytext()); }
 "resultados_esperados"       { return new Symbol(Tokens.BLOCK_TYPE, yytext()); }
 
+// Identificador de cenario (procura string cenario_[a-zA-Z0-9_]* { )
+cenario_{identificador}       { return new Symbol(Tokens.IDENTIFICADOR_CENARIO, yytext()); }
+acao_{identificador}          { return new Symbol(Tokens.IDENTIFICADOR_ACAO, yytext()); }
+
 /* operadores */
 "{"                          { return new Symbol(Tokens.BLOCK_START); }
 "}"                          { return new Symbol(Tokens.BLOCK_END); }
@@ -46,9 +51,8 @@ espaco = \t|\f|" "|\r|\n
 ")"                          { return new Symbol(Tokens.RPAREN); }
 
 /* Identificadores */
-\"[^\"]*\"                   { return new Symbol(Tokens.STRING_LITERAL, 
-                                     yytext().substring(1, yytext().length()-1)); }
-[a-zA-Z][a-zA-Z0-9_]*       { return new Symbol(Tokens.IDENTIFIER, yytext()); }
+\"[^\"]*\"                  { return new Symbol(Tokens.STRING_LITERAL,yytext().substring(1, yytext().length()-1)); }
+{identificador}             { return new Symbol(Tokens.IDENTIFIER, yytext()); }
 
 /* Whitespace */
 [ \t\n\r\f]                  { /* Ignore whitespace */ }
