@@ -52,7 +52,6 @@ cenarios                      { return new Symbol(Tokens.BLOCO, yytext()); }
 ")"                          { return new Symbol(Tokens.RPAREN); }
 "["                          { return new Symbol(Tokens.LBRACKET); }
 "]"                          { return new Symbol(Tokens.RBRACKET); }
-"\n"                         { return new Symbol(Tokens.NOVA_LINHA, yytext());}
 
 /* Identificadores */
 \"[^\"]*\"                  { return new Symbol(Tokens.STRING,yytext().substring(1, yytext().length()-1)); }

@@ -53,8 +53,6 @@ terminal String IDENTIFICADOR;      // identificador = "valor"
 terminal String NUMERAL;            // 123
 terminal String BLOCO;              // definicao_de_{block}
 
-terminal NOVA_LINHA;
-
 /* Não terminais */
 non terminal input;
 non terminal Programa programa;

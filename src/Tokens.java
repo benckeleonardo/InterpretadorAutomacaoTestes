@@ -11,7 +11,6 @@ public class Tokens {
   public static final int EOF = 0;
   public static final int NUMERAL = 12;
   public static final int RBRACKET = 5;
-  public static final int NOVA_LINHA = 14;
   public static final int error = 1;
   public static final int RPAREN = 9;
   public static final int SEMICOLON = 7;
@@ -35,8 +34,7 @@ public class Tokens {
   "STRING",
   "IDENTIFICADOR",
   "NUMERAL",
-  "BLOCO",
-  "NOVA_LINHA"
+  "BLOCO"
   };
 }
 

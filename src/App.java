@@ -7,7 +7,7 @@ import java.util.List;
 public class App {
     private static void printToken(Symbol token) {
         String value = token.value != null ? token.value.toString() : "null";
-        System.out.printf("Token: <%d, %s> at position: %d\n", 
+        System.out.printf("Token: <%d, %s> na posição: %d\n", 
             token.sym, value, token.left);
     }
 
@@ -23,13 +23,13 @@ public class App {
                 printToken(token);
             }
             
-            System.out.printf("\nTotal tokens found: %d\n", tokens.size());
+            System.out.printf("\nNúmero total de tokens: %d\n", tokens.size());
             
         } catch (IOException e) {
-            System.err.println("File Error: " + e.getMessage());
+            System.err.println("Erro de arquivo: " + e.getMessage());
             e.printStackTrace();
         } catch (Exception e) {
-            System.err.println("Scanning Error: " + e.getMessage());
+            System.err.println("Erro de scan: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -52,10 +52,10 @@ public class App {
             }
             
         } catch (IOException e) {
-            System.err.println("File Error: " + e.getMessage());
+            System.err.println("Erro de arquivo: " + e.getMessage());
             e.printStackTrace();
         } catch (Exception e) {
-            System.err.println("Parsing Error: " + e.getMessage());
+            System.err.println("Erro de parse: " + e.getMessage());
             System.err.println("Stack trace:");
             e.printStackTrace();
         }
