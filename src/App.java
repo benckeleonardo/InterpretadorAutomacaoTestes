@@ -67,14 +67,14 @@ public class App {
         System.out.println("Arquivo de entrada: " + filename);
         
         try {
-            // First pass: Just scan and show tokens
+            // Faz o scan e mostra os tokens
             scanOnly(filename);
             
-            // Second pass: Full parsing
+            // Faz o parse do arquivo
             parseOnly(filename);
             
         } catch (Exception e) {
-            System.err.println("Fatal Error: " + e.getMessage());
+            System.err.println("Erro: " + e.getMessage());
             e.printStackTrace();
         }
     }

@@ -1,5 +1,8 @@
 package pacoteInterno;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,9 +15,10 @@ public final class Programa {
         this.blocos = blocosGenericos;
         verifyBlocks();  // Verifica se os blocos necessários estão presentes
         setupSeleniumHeaders();  // Inicializa o cabeçalho do código Python
-        setupConfig();  // Configura o driver Selenium
+        setupConfig();  // Configura o driver Selenium e as variáveis necessárias
         instantiateTestClass();  // Inicia a classe de teste em Selenium
         processBlocos();
+        gerarCodigo();  // Gera o código Python
     }
 
     private void processBlocos() {
@@ -38,27 +42,37 @@ public final class Programa {
                 // Processa cada item do conteúdo
                 for (HashMap<String, Object> item : content) {
                     processConfigurationBlock((String) item.get("browser"));
+                    processUrlBase((String) item.get("url_base"));
+                    // processLogin((String) item.get("ambiente"));
                 }
             }
         }
     }
 
+    private void processUrlBase(String urlBase) {
+        if (urlBase != null) {
+            python_code += "\nurl_base = \"" + urlBase + "\"\n";
+        } else {
+            System.err.println("Erro: faltando url_base");
+        }
+    }
+
     private void processActionBlocks(List<HashMap<String, Object>> actions) {
-        System.out.println("========================================");
-        System.out.println("Ações:");
-        System.out.println(actions);
-        System.out.println("========================================");
+        // System.out.println("========================================");
+        // System.out.println("Ações:");
+        // System.out.println(actions);
+        // System.out.println("========================================");
     
         // Itera sobre a lista de ações fornecida
         for (HashMap<String, Object> action : actions) {
             String actionName = (String) action.get("block_type");
             List<HashMap<String, Object>> content = (List<HashMap<String, Object>>) action.get("content");
     
-            System.out.println("========================================");
-            System.out.println("Ação: " + actionName);
-            System.out.println("Conteúdo:");
-            System.out.println(content);
-            System.out.println("========================================");
+            // System.out.println("========================================");
+            // System.out.println("Ação: " + actionName);
+            // System.out.println("Conteúdo:");
+            // System.out.println(content);
+            // System.out.println("========================================");
     
             // Inicializa as variáveis para armazenar as informações
             String tipo = null;
@@ -89,7 +103,7 @@ public final class Programa {
             // Agora processamos com base no tipo
             if (tipo != null) {
                 switch (tipo) {
-                    case "navegacao":
+                    case "navegacao" -> {
                         if (rota != null) {
                             python_code += "\n    def " + actionName + "(self):\n";
                             python_code += "        driver = self.driver\n";
@@ -102,9 +116,9 @@ public final class Programa {
                         } else {
                             System.err.println("Erro: faltando rota para " + actionName);
                         }
-                        break;
+                    }
     
-                    case "input":
+                    case "input" -> {
                         if (seletor != null && valorSeletor != null) {
                             python_code += "\n    def " + actionName + "(self):\n";
                             python_code += "        driver = self.driver\n";
@@ -113,9 +127,9 @@ public final class Programa {
                         } else {
                             System.err.println("Erro: faltando seletor ou valor_seletor para " + actionName);
                         }
-                        break;
+                    }
     
-                    case "clique":
+                    case "clique" -> {
                         if (seletor != null && valorSeletor != null) {
                             python_code += "\n    def " + actionName + "(self):\n";
                             python_code += "        driver = self.driver\n";
@@ -124,10 +138,9 @@ public final class Programa {
                         } else {
                             System.err.println("Erro: faltando seletor ou valor_seletor para " + actionName);
                         }
-                        break;
+                    }
     
-                    default:
-                        System.err.println("Tipo de ação não suportado: " + tipo + " para " + actionName);
+                    default -> System.err.println("Tipo de ação não suportado: " + tipo + " para " + actionName);
                 }
             } else {
                 System.err.println("Erro: Tipo de ação não especificado para " + actionName);
@@ -164,39 +177,24 @@ public final class Programa {
         }
     }
 
-
-    
-    // Método para iniciar a classe de teste em Selenium
+    // Método para iniciar a classe Python de teste padrão em Selenium
     private void instantiateTestClass() {
         this.python_code += "\n# Iniciando a classe de teste\n";
         this.python_code += "class TesteAutomatizado:\n";
         this.python_code += "    def __init__(self, driver):\n";
         this.python_code += "        self.driver = driver\n";
         this.python_code += "\n";
-        this.python_code += "    def executar_teste(self):\n";
-        this.python_code += "        # Adicione aqui os métodos de teste\n";
-        this.python_code += "        pass\n";
-    }
-
-    // Getter e setter para blocos
-    public List<HashMap<String, Object>> getBlocos() {
-        return blocos;
-    }
-
-    public void setBlocos(List<HashMap<String, Object>> blocos) {
-        this.blocos = blocos;
     }
 
     // Método para processar o bloco de configuração e definir o driver
     private void processConfigurationBlock(String browser) {
         if (browser != null) {
             switch (browser.toLowerCase()) {
-                case "chrome":
+                case "chrome" -> {
                     this.python_code += "\n# Configuração do Selenium para o Chrome\n";
                     this.python_code += "driver = webdriver.Chrome()\n";
-                    break;
-                default:
-                    System.err.println("Navegador não suportado: " + browser);
+                }
+                default -> System.err.println("Navegador não suportado: " + browser);
             }
         }
     }
@@ -269,5 +267,19 @@ public final class Programa {
                 "blocos=" + blocos +
                 '}'
                 + "\n\nCódigo Python gerado:\n\n" + python_code;
+    }
+
+    // método gerarCodigo que retorna o código Python gerado para um arquivo .py na pasta raiz
+    public void gerarCodigo() {
+        try {
+            // Cria um novo arquivo Python
+            File file = new File("TesteAutomatizado.py");
+            try (FileWriter writer = new FileWriter(file)) {
+                writer.write(python_code);
+            }
+            System.out.println("Código Python gerado com sucesso!");
+        } catch (IOException e) {
+            System.err.println("Erro ao gerar o código Python: " + e.getMessage());
+        }
     }
 }

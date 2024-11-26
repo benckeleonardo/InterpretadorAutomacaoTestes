@@ -148,11 +148,9 @@ public class Parser extends java_cup.runtime.lr_parser {
     Scanner s;
     Parser(Scanner s){ this.s=s; }
 
-    String teste = "teste";
-    int count = 0;
+    // int count = 0;
     int lines = 1;
 
-    boolean debug = false;
     boolean error = false;
     String descricao_erro = "";
     
@@ -223,7 +221,7 @@ class CUP$Parser$actions {
 		int blright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		List<HashMap<String,Object>> bl = (List<HashMap<String,Object>>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		 
-        System.out.println("Parsed multiple blocks: " + bl);
+        System.out.println("Processou bloco composto: " + bl);
         RESULT = bl;
     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("input",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);

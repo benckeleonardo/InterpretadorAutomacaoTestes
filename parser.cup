@@ -11,11 +11,9 @@ parser code {:
     Scanner s;
     Parser(Scanner s){ this.s=s; }
 
-    String teste = "teste";
-    int count = 0;
+    // int count = 0;
     int lines = 1;
 
-    boolean debug = false;
     boolean error = false;
     String descricao_erro = "";
     
@@ -84,7 +82,7 @@ inicio ::= LBRACKET blocos_genericos:blocos RBRACKET
 // Adicionar agora o bloco de configuração ao input também
 input ::= LBRACKET blocos_genericos:bl RBRACKET
     {: 
-        System.out.println("Parsed multiple blocks: " + bl);
+        System.out.println("Processou bloco composto: " + bl);
         RESULT = bl;
     :}
 ;
