@@ -4,5 +4,9 @@
         url_base = "teste";
         browser = "chrome";
     }
-    
+
+    definicao_de_teste_completo {
+        teste = "Suite de testes de login";
+        configuracao = "teste";
+    }
 ]
