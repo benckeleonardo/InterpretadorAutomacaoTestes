@@ -722,7 +722,7 @@ class Scanner implements java_cup.runtime.Scanner {
             // fall through
           case 18: break;
           case 3:
-            { return new Symbol(Tokens.LINHA, yytext());
+            { return new Symbol(Tokens.NOVA_LINHA, yytext());
             }
             // fall through
           case 19: break;
@@ -777,17 +777,17 @@ class Scanner implements java_cup.runtime.Scanner {
             // fall through
           case 29: break;
           case 14:
-            { return new Symbol(Tokens.STRING_LITERAL,yytext().substring(1, yytext().length()-1));
+            { return new Symbol(Tokens.STRING,yytext().substring(1, yytext().length()-1));
             }
             // fall through
           case 30: break;
           case 15:
-            { return new Symbol(Tokens.BLOCK, yytext());
+            { return new Symbol(Tokens.BLOCO, yytext());
             }
             // fall through
           case 31: break;
           case 16:
-            { return new Symbol(Tokens.BLOCK, yytext().substring(13));
+            { return new Symbol(Tokens.BLOCO, yytext().substring(13));
             }
             // fall through
           case 32: break;

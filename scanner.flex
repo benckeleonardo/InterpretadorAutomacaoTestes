@@ -32,16 +32,16 @@ identificador = [a-zA-Z][a-zA-Z0-9_]*
 %%
 
 /* Identificadores de blocos */
-definicao_de_{identificador}  { return new Symbol(Tokens.BLOCK, yytext().substring(13)); }
-cenario_{identificador}       { return new Symbol(Tokens.BLOCK, yytext()); }
-acao_{identificador}          { return new Symbol(Tokens.BLOCK, yytext()); }
-teste_{identificador}         { return new Symbol(Tokens.BLOCK, yytext()); }
-resultado_{identificador}     { return new Symbol(Tokens.BLOCK, yytext()); }
-cenarios_{identificador}      { return new Symbol(Tokens.BLOCK, yytext()); }
-dados_{identificador}         { return new Symbol(Tokens.BLOCK, yytext()); }
-acoes                         { return new Symbol(Tokens.BLOCK, yytext()); }
-resultados                    { return new Symbol(Tokens.BLOCK, yytext()); }
-cenarios                      { return new Symbol(Tokens.BLOCK, yytext()); }
+definicao_de_{identificador}  { return new Symbol(Tokens.BLOCO, yytext().substring(13)); }
+cenario_{identificador}       { return new Symbol(Tokens.BLOCO, yytext()); }
+acao_{identificador}          { return new Symbol(Tokens.BLOCO, yytext()); }
+teste_{identificador}         { return new Symbol(Tokens.BLOCO, yytext()); }
+resultado_{identificador}     { return new Symbol(Tokens.BLOCO, yytext()); }
+cenarios_{identificador}      { return new Symbol(Tokens.BLOCO, yytext()); }
+dados_{identificador}         { return new Symbol(Tokens.BLOCO, yytext()); }
+acoes                         { return new Symbol(Tokens.BLOCO, yytext()); }
+resultados                    { return new Symbol(Tokens.BLOCO, yytext()); }
+cenarios                      { return new Symbol(Tokens.BLOCO, yytext()); }
 
 /* Operadores */
 "{"                          { return new Symbol(Tokens.LBRACE); }
@@ -52,10 +52,10 @@ cenarios                      { return new Symbol(Tokens.BLOCK, yytext()); }
 ")"                          { return new Symbol(Tokens.RPAREN); }
 "["                          { return new Symbol(Tokens.LBRACKET); }
 "]"                          { return new Symbol(Tokens.RBRACKET); }
-"\n"                         { return new Symbol(Tokens.LINHA, yytext());}
+"\n"                         { return new Symbol(Tokens.NOVA_LINHA, yytext());}
 
 /* Identificadores */
-\"[^\"]*\"                  { return new Symbol(Tokens.STRING_LITERAL,yytext().substring(1, yytext().length()-1)); }
+\"[^\"]*\"                  { return new Symbol(Tokens.STRING,yytext().substring(1, yytext().length()-1)); }
 {identificador}             { return new Symbol(Tokens.IDENTIFICADOR, yytext()); }
 {digito}+                   { return new Symbol(Tokens.NUMERAL, yytext()); }
 

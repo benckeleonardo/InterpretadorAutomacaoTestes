@@ -229,7 +229,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 3: // bloco_generico ::= BLOCK LBRACE chaves_valor_ou_blocos RBRACE 
+          case 3: // bloco_generico ::= BLOCO LBRACE chaves_valor_ou_blocos RBRACE 
             {
               HashMap<String,Object> RESULT =null;
 		int blocoleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).left;
@@ -422,7 +422,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 14: // chave_valor ::= IDENTIFICADOR EQUALS STRING_LITERAL SEMICOLON 
+          case 14: // chave_valor ::= IDENTIFICADOR EQUALS STRING SEMICOLON 
             {
               HashMap<String,String> RESULT =null;
 		int chaveleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).left;
@@ -442,7 +442,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 15: // chave_valor ::= NUMERAL EQUALS STRING_LITERAL SEMICOLON 
+          case 15: // chave_valor ::= NUMERAL EQUALS STRING SEMICOLON 
             {
               HashMap<String,String> RESULT =null;
 		int chaveleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).left;

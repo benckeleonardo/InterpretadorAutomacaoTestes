@@ -48,12 +48,12 @@ terminal LBRACKET, RBRACKET;        // [ ]
 terminal EQUALS;                    // =
 terminal SEMICOLON;                 // ;
 terminal LPAREN, RPAREN;            // ( )
-terminal String STRING_LITERAL;     // "qualquer coisa"
+terminal String STRING;             // "qualquer coisa"
 terminal String IDENTIFICADOR;      // identificador = "valor"
 terminal String NUMERAL;            // 123
-terminal String BLOCK;              // definicao_de_{block}
+terminal String BLOCO;              // definicao_de_{block}
 
-terminal LINHA;
+terminal NOVA_LINHA;
 
 /* Não terminais */
 non terminal input;
@@ -91,7 +91,7 @@ input ::= LBRACKET blocos_genericos:bl RBRACKET
 
 
 /* Bloco genérico */
-bloco_generico ::= BLOCK:bloco LBRACE chaves_valor_ou_blocos:conteudo RBRACE
+bloco_generico ::= BLOCO:bloco LBRACE chaves_valor_ou_blocos:conteudo RBRACE
     {: 
         HashMap<String, Object> map = new HashMap<>();
         map.put("block_type", bloco);
@@ -170,14 +170,14 @@ blocos_genericos ::= bloco_generico:bloco
 // chave valor.
 // identificador = "valor";
 // 123 = "valor";
-chave_valor ::= IDENTIFICADOR:chave EQUALS STRING_LITERAL:valor SEMICOLON
+chave_valor ::= IDENTIFICADOR:chave EQUALS STRING:valor SEMICOLON
     {: 
         HashMap<String, String> map = new HashMap<>();
         map.put(chave, valor);
         System.out.println("Chave: " + chave + ", Valor: " + valor);
         RESULT = map;
     :}
-    | NUMERAL:chave EQUALS STRING_LITERAL:valor SEMICOLON
+    | NUMERAL:chave EQUALS STRING:valor SEMICOLON
     {: 
         HashMap<String, String> map = new HashMap<>();
         map.put(String.valueOf(chave), valor); // Converta o NUMERAL para String
