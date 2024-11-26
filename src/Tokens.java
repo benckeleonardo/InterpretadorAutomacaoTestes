@@ -6,40 +6,21 @@
 /** CUP generated class containing symbol constants. */
 public class Tokens {
   /* terminals */
-  public static final int RESULTADOS_ESPERADOS_CENARIO = 33;
-  public static final int IDENTIFICADOR_CENARIO = 29;
-  public static final int LINHA = 20;
-  public static final int ACOES_CENARIO = 22;
-  public static final int NOME = 14;
-  public static final int SEMICOLON = 7;
-  public static final int BLOCK_TYPE_ACOES = 15;
-  public static final int RBRACE = 3;
-  public static final int RPAREN = 9;
-  public static final int IDENTIFICADOR_ACAO = 23;
-  public static final int IDENTIFICADOR_CENARIOS_TESTE = 27;
-  public static final int BLOCK_TYPE_CONFIGURACAO = 19;
-  public static final int IDENTIFICADOR_TESTE = 25;
-  public static final int LBRACKET = 4;
-  public static final int LPAREN = 8;
-  public static final int LBRACE = 2;
-  public static final int RBRACKET = 5;
-  public static final int DADOS_ENTRADA_CENARIO = 32;
-  public static final int STRING_LITERAL = 10;
-  public static final int BLOCK_TYPE_CENARIOS = 17;
-  public static final int EQUALS = 6;
-  public static final int IDENTIFICADOR_URL_BASE = 28;
-  public static final int IDENTIFICADOR_AMBIENTE = 26;
-  public static final int EOF = 0;
-  public static final int IDENTIFICADOR_CONFIGURACAO_TESTE = 31;
-  public static final int error = 1;
-  public static final int BLOCK_TYPE_TESTE = 18;
-  public static final int IDENTIFICADOR_BROWSER = 24;
-  public static final int IDENTIFICADOR = 11;
-  public static final int BLOCK_TYPE_RESULTADOS = 16;
-  public static final int IDENTIFICADOR_ACAO_TIPO = 21;
-  public static final int IDENTIFICADOR_RESULTADO = 30;
-  public static final int NUMERAL = 12;
   public static final int BLOCK = 13;
+  public static final int LBRACE = 2;
+  public static final int LINHA = 14;
+  public static final int STRING_LITERAL = 10;
+  public static final int EOF = 0;
+  public static final int NUMERAL = 12;
+  public static final int RBRACKET = 5;
+  public static final int error = 1;
+  public static final int RPAREN = 9;
+  public static final int SEMICOLON = 7;
+  public static final int EQUALS = 6;
+  public static final int LPAREN = 8;
+  public static final int LBRACKET = 4;
+  public static final int RBRACE = 3;
+  public static final int IDENTIFICADOR = 11;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -55,26 +36,7 @@ public class Tokens {
   "IDENTIFICADOR",
   "NUMERAL",
   "BLOCK",
-  "NOME",
-  "BLOCK_TYPE_ACOES",
-  "BLOCK_TYPE_RESULTADOS",
-  "BLOCK_TYPE_CENARIOS",
-  "BLOCK_TYPE_TESTE",
-  "BLOCK_TYPE_CONFIGURACAO",
-  "LINHA",
-  "IDENTIFICADOR_ACAO_TIPO",
-  "ACOES_CENARIO",
-  "IDENTIFICADOR_ACAO",
-  "IDENTIFICADOR_BROWSER",
-  "IDENTIFICADOR_TESTE",
-  "IDENTIFICADOR_AMBIENTE",
-  "IDENTIFICADOR_CENARIOS_TESTE",
-  "IDENTIFICADOR_URL_BASE",
-  "IDENTIFICADOR_CENARIO",
-  "IDENTIFICADOR_RESULTADO",
-  "IDENTIFICADOR_CONFIGURACAO_TESTE",
-  "DADOS_ENTRADA_CENARIO",
-  "RESULTADOS_ESPERADOS_CENARIO"
+  "LINHA"
   };
 }
 

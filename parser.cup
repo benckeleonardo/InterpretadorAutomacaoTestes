@@ -26,18 +26,13 @@ parser code {:
 /* conectar esse parser ao scanner! */
 init with {:  :};
 scan with {:
-    // debug 
     Symbol token = s.next_token();
-    // String token_str = token.toString();
-    
-    // String token_str = token.value.toString();
-    // String token_str = token.value.toString();
 
     // se token.value for null, então token_str = token.toString()
     String token_str = token.value == null ? token.toString() : token.value.toString();
 
     System.out.println("Token: " + token_str + " - " + token.sym);
-    System.out.println("Error: " + error);
+    System.out.println("Erro encontrado: " + error);
 
     if(error){
         error = false;
@@ -47,69 +42,44 @@ scan with {:
     return token; 
 :};
 
-/* Terminals */
-terminal LBRACE, RBRACE;             // { }
-terminal LBRACKET, RBRACKET;         // [ ]
-terminal EQUALS;                     // =
-terminal SEMICOLON;                  // ;
-terminal LPAREN, RPAREN;             // ( )
+/* Terminais */
+terminal LBRACE, RBRACE;            // { }
+terminal LBRACKET, RBRACKET;        // [ ]
+terminal EQUALS;                    // =
+terminal SEMICOLON;                 // ;
+terminal LPAREN, RPAREN;            // ( )
 terminal String STRING_LITERAL;     // "qualquer coisa"
 terminal String IDENTIFICADOR;      // identificador = "valor"
 terminal String NUMERAL;            // 123
 terminal String BLOCK;              // definicao_de_{block}
 
-terminal NOME, BLOCK_TYPE_ACOES, BLOCK_TYPE_RESULTADOS, BLOCK_TYPE_CENARIOS, BLOCK_TYPE_TESTE, BLOCK_TYPE_CONFIGURACAO;
+terminal LINHA;
 
-terminal LINHA, IDENTIFICADOR_ACAO_TIPO, ACOES_CENARIO, IDENTIFICADOR_ACAO, IDENTIFICADOR_BROWSER, IDENTIFICADOR_TESTE, IDENTIFICADOR_AMBIENTE, IDENTIFICADOR_CENARIOS_TESTE, IDENTIFICADOR_URL_BASE, IDENTIFICADOR_CENARIO, IDENTIFICADOR_RESULTADO, IDENTIFICADOR_CONFIGURACAO_TESTE, DADOS_ENTRADA_CENARIO, RESULTADOS_ESPERADOS_CENARIO;
-
-/* Non terminals para blocos principais */
+/* Não terminais */
 non terminal input;
 non terminal Programa programa;
-
-/* Um par chave-valor simples */
-// non terminal HashMap<String, String> chave_valor;
 
 /* Uma lista de pares chave-valor */
 non terminal List<HashMap<String, String>> chaves_valor;
 
-/* Um bloco genérico com conteúdo misto */
-// non terminal HashMap<String, Object> bloco_generico;
-
 /* Conteúdo de um bloco (misto: chave-valor ou outros blocos) */
 non terminal List<Object> conteudo_bloco_aninhado;
 
-/* Lista de blocos aninhados ou genéricos */
-non terminal List<HashMap<String, Object>> blocos_genericos_ou_aninhados;
-
 /* Estruturas para armazenar dados */
-non terminal HashMap<String, Object> bloco_generico;   // Blocos genéricos com chaves e valores ou outros blocos
-non terminal HashMap<String, String> chave_valor;      // Um par chave-valor
-non terminal List<Object> chaves_valor_ou_blocos;      // Lista combinada de chave-valor e blocos
-non terminal List<HashMap<String, Object>> blocos_genericos; // Lista de blocos
-
-non terminal HashMap<String, String> acao;
-
+non terminal HashMap<String, Object> bloco_generico;         // Blocos genéricos com chaves e valores ou outros blocos
+non terminal HashMap<String, String> chave_valor;            // Um par chave-valor
+non terminal List<Object> chaves_valor_ou_blocos;            // Lista combinada de chave-valor e blocos
+non terminal List<HashMap<String, Object>> blocos_genericos; // Lista de bloco genérico
 
 non terminal inicio;
 
 /* Gramática */
-
 inicio ::= LBRACKET blocos_genericos:blocos RBRACKET
     {: 
         System.out.println("Programa final com blocos: " + blocos);
         RESULT = blocos; 
     :}
 ;
-
-
-// TESTE => Esse aqui é para armazenar um conjunto de chave valores. A gente precisa de um Blocks.
-// input ::= LBRACKET chaves_valor:cv RBRACKET
-//     {: 
-//         System.out.println("Parsed input: " + cv);
-//         RESULT = cv;
-//     :}
-// ;
-
 
 // Adicionar agora o bloco de configuração ao input também
 input ::= LBRACKET blocos_genericos:bl RBRACKET
@@ -119,16 +89,8 @@ input ::= LBRACKET blocos_genericos:bl RBRACKET
     :}
 ;
 
-// INICIO BLOCO DE CONFIGURAÇÃO
-// EXEMPLO:
-// definicao_de_configuracao {
-//     ambiente = "teste";
-//     url_base = "https://www.example.com/";
-//     browser = "chrome";
-// }
 
 /* Bloco genérico */
-// Bloco genérico com suporte para aninhamento
 bloco_generico ::= BLOCK:bloco LBRACE chaves_valor_ou_blocos:conteudo RBRACE
     {: 
         HashMap<String, Object> map = new HashMap<>();
@@ -207,6 +169,7 @@ blocos_genericos ::= bloco_generico:bloco
 
 // chave valor.
 // identificador = "valor";
+// 123 = "valor";
 chave_valor ::= IDENTIFICADOR:chave EQUALS STRING_LITERAL:valor SEMICOLON
     {: 
         HashMap<String, String> map = new HashMap<>();
