@@ -1,3 +1,4 @@
+// scanner.flex
 import java_cup.runtime.Symbol;
 
 /*
@@ -31,21 +32,39 @@ identificador = [a-zA-Z][a-zA-Z0-9_]*
 %%
 
 /* Identificadores de blocos */
-"definicao_de_cenarios"       { return new Symbol(Tokens.BLOCK_TYPE_CENARIOS, yytext()); }
-"definicao_de_configuracao"   { return new Symbol(Tokens.BLOCK_TYPE_CONFIGURACAO, yytext()); }
-"definicao_de_acoes"         { return new Symbol(Tokens.BLOCK_TYPE_ACTION, yytext()); }
-"tipo"					     { return new Symbol(Tokens.IDENTIFICADOR_ACAO_TIPO, yytext()); }
-"dados_entrada"			     { return new Symbol(Tokens.DADOS_ENTRADA, yytext()); }
-"acoes"                      { return new Symbol(Tokens.ACOES, yytext()); }
-"resultados_esperados"       { return new Symbol(Tokens.RESULTADOS_ESPERADOS, yytext()); }
+// "definicao_de_cenarios"      { return new Symbol(Tokens.BLOCK_TYPE_CENARIOS, yytext()); }
+// "definicao_de_acoes"         { return new Symbol(Tokens.BLOCK_TYPE_ACOES, yytext()); }
+// "definicao_de_configuracao"  { return new Symbol(Tokens.BLOCK_TYPE_CONFIGURACAO, yytext()); }
+// "definicao_de_resultados"    { return new Symbol(Tokens.BLOCK_TYPE_RESULTADOS, yytext()); }
+
+definicao_de_{identificador}  { return new Symbol(Tokens.BLOCK, yytext().substring(13)); }
 
 // Identificador de cenario (procura string cenario_[a-zA-Z0-9_]* { )
 cenario_{identificador}       { return new Symbol(Tokens.IDENTIFICADOR_CENARIO, yytext()); }
 acao_{identificador}          { return new Symbol(Tokens.IDENTIFICADOR_ACAO, yytext()); }
+teste_{identificador}         { return new Symbol(Tokens.IDENTIFICADOR_TESTE, yytext()); }
+resultado_{identificador}     { return new Symbol(Tokens.IDENTIFICADOR_RESULTADO, yytext()); }
+
+// Identificadores internos de cenário
+// "dados_entrada"              { return new Symbol(Tokens.DADOS_ENTRADA_CENARIO, yytext()); }
+// "acoes"                      { return new Symbol(Tokens.ACOES_CENARIO, yytext()); }
+// "resultados_esperados"       { return new Symbol(Tokens.RESULTADOS_ESPERADOS_CENARIO, yytext()); }
+
+// Identificadores internos de configuração
+// "ambiente"       { return new Symbol(Tokens.IDENTIFICADOR_AMBIENTE, yytext()); }
+// "url_base"       { return new Symbol(Tokens.IDENTIFICADOR_URL_BASE, yytext()); }
+// "browser"        { return new Symbol(Tokens.IDENTIFICADOR_BROWSER, yytext()); }
+
+// Identificadores internos de Teste
+// "configuracao"   { return new Symbol(Tokens.IDENTIFICADOR_CONFIGURACAO_TESTE, yytext()); }
+// "cenarios"       { return new Symbol(Tokens.IDENTIFICADOR_CENARIOS_TESTE, yytext()); }
+
+// Identificadores internos de Ação
+// "tipo"                       { return new Symbol(Tokens.IDENTIFICADOR_ACAO_TIPO, yytext()); }
 
 
 // Identificador genérico de nome
-"nome"						{ return new Symbol(Tokens.NOME, yytext()); }
+"nome"              { return new Symbol(Tokens.NOME, yytext()); }
 
 /* operadores */
 "{"                          { return new Symbol(Tokens.LBRACE); }
@@ -54,13 +73,16 @@ acao_{identificador}          { return new Symbol(Tokens.IDENTIFICADOR_ACAO, yyt
 ";"                          { return new Symbol(Tokens.SEMICOLON); }
 "("                          { return new Symbol(Tokens.LPAREN); }
 ")"                          { return new Symbol(Tokens.RPAREN); }
+"["                          { return new Symbol(Tokens.LBRACKET); }
+"]"                          { return new Symbol(Tokens.RBRACKET); }
+"\n"                         { return new Symbol(Tokens.LINHA, yytext());}
 
 /* Identificadores */
 \"[^\"]*\"                  { return new Symbol(Tokens.STRING_LITERAL,yytext().substring(1, yytext().length()-1)); }
-{identificador}             { return new Symbol(Tokens.IDENTIFIER, yytext()); }
+{identificador}             { return new Symbol(Tokens.IDENTIFICADOR, yytext()); }
 
-/* Whitespace */
-[ \t\n\r\f]                  { /* Ignore whitespace */ }
+/* Espaços em branco */
+{espaco}+                   { /* Ignora espaços em branco */ }
 
-/* Invalid characters */
-.                            { System.out.println("Illegal character: " + yytext()); }
+/* Caraacteres não reconhecidos */
+.                           { System.out.println("Caractere não reconhecido: " + yytext()); }

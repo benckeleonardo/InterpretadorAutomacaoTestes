@@ -6,53 +6,73 @@
 /** CUP generated class containing symbol constants. */
 public class Tokens {
   /* terminals */
-  public static final int IDENTIFICADOR_CENARIO = 16;
-  public static final int NOME = 15;
-  public static final int SEMICOLON = 5;
-  public static final int BLOCK_TYPE_ACTION = 12;
+  public static final int RESULTADOS_ESPERADOS_CENARIO = 32;
+  public static final int IDENTIFICADOR_CENARIO = 28;
+  public static final int LINHA = 19;
+  public static final int ACOES_CENARIO = 21;
+  public static final int NOME = 13;
+  public static final int SEMICOLON = 7;
+  public static final int BLOCK_TYPE_ACOES = 14;
   public static final int RBRACE = 3;
-  public static final int RPAREN = 7;
-  public static final int IDENTIFICADOR_ACAO = 10;
-  public static final int IDENTIFIER = 22;
-  public static final int BLOCK_TYPE_CONFIGURACAO = 14;
-  public static final int CENARIO_DADOS_ENTRADA = 19;
-  public static final int LPAREN = 6;
+  public static final int RPAREN = 9;
+  public static final int IDENTIFICADOR_ACAO = 22;
+  public static final int IDENTIFICADOR_CENARIOS_TESTE = 26;
+  public static final int BLOCK_TYPE_CONFIGURACAO = 18;
+  public static final int IDENTIFICADOR_TESTE = 24;
+  public static final int LBRACKET = 4;
+  public static final int LPAREN = 8;
   public static final int LBRACE = 2;
-  public static final int STRING_LITERAL = 8;
-  public static final int BLOCK_TYPE_CENARIOS = 13;
-  public static final int ACOES = 21;
-  public static final int EQUALS = 4;
+  public static final int RBRACKET = 5;
+  public static final int DADOS_ENTRADA_CENARIO = 31;
+  public static final int STRING_LITERAL = 10;
+  public static final int BLOCK_TYPE_CENARIOS = 16;
+  public static final int EQUALS = 6;
+  public static final int IDENTIFICADOR_URL_BASE = 27;
+  public static final int IDENTIFICADOR_AMBIENTE = 25;
   public static final int EOF = 0;
-  public static final int CENARIO_ACOES = 17;
+  public static final int IDENTIFICADOR_CONFIGURACAO_TESTE = 30;
   public static final int error = 1;
-  public static final int DADOS_ENTRADA = 20;
-  public static final int IDENTIFICADOR_ACAO_TIPO = 11;
-  public static final int BLOCK_TYPE = 9;
-  public static final int RESULTADOS_ESPERADOS = 18;
+  public static final int BLOCK_TYPE_TESTE = 17;
+  public static final int IDENTIFICADOR_BROWSER = 23;
+  public static final int IDENTIFICADOR = 11;
+  public static final int BLOCK_TYPE_RESULTADOS = 15;
+  public static final int IDENTIFICADOR_ACAO_TIPO = 20;
+  public static final int IDENTIFICADOR_RESULTADO = 29;
+  public static final int BLOCK = 12;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
   "LBRACE",
   "RBRACE",
+  "LBRACKET",
+  "RBRACKET",
   "EQUALS",
   "SEMICOLON",
   "LPAREN",
   "RPAREN",
   "STRING_LITERAL",
-  "BLOCK_TYPE",
-  "IDENTIFICADOR_ACAO",
-  "IDENTIFICADOR_ACAO_TIPO",
-  "BLOCK_TYPE_ACTION",
-  "BLOCK_TYPE_CENARIOS",
-  "BLOCK_TYPE_CONFIGURACAO",
+  "IDENTIFICADOR",
+  "BLOCK",
   "NOME",
+  "BLOCK_TYPE_ACOES",
+  "BLOCK_TYPE_RESULTADOS",
+  "BLOCK_TYPE_CENARIOS",
+  "BLOCK_TYPE_TESTE",
+  "BLOCK_TYPE_CONFIGURACAO",
+  "LINHA",
+  "IDENTIFICADOR_ACAO_TIPO",
+  "ACOES_CENARIO",
+  "IDENTIFICADOR_ACAO",
+  "IDENTIFICADOR_BROWSER",
+  "IDENTIFICADOR_TESTE",
+  "IDENTIFICADOR_AMBIENTE",
+  "IDENTIFICADOR_CENARIOS_TESTE",
+  "IDENTIFICADOR_URL_BASE",
   "IDENTIFICADOR_CENARIO",
-  "CENARIO_ACOES",
-  "RESULTADOS_ESPERADOS",
-  "CENARIO_DADOS_ENTRADA",
-  "DADOS_ENTRADA",
-  "ACOES",
-  "IDENTIFIER"
+  "IDENTIFICADOR_RESULTADO",
+  "IDENTIFICADOR_CONFIGURACAO_TESTE",
+  "DADOS_ENTRADA_CENARIO",
+  "RESULTADOS_ESPERADOS_CENARIO"
   };
 }
 

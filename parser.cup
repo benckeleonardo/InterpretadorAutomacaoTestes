@@ -1,15 +1,8 @@
-/*Documentação: http://www2.cs.tum.edu/projects/cup/ */
+/* Documentação: http://www2.cs.tum.edu/projects/cup/ */
 import java_cup.runtime.*;
 import java.util.List;
 import java.util.ArrayList;
-
-import myPackage.Action;
-import myPackage.Block;
-import myPackage.BlockContent;
-import myPackage.Entry;
-import myPackage.Parameter;
-import myPackage.ParseResult;
-import myPackage.Cenario;
+import java.util.HashMap;
 
 import myPackage.Programa; // classe que vai guardar os blocos de ação e cenários, pra gerar o código final
 
@@ -17,366 +10,146 @@ parser code {:
     // conectar esse parser ao scanner!
     Scanner s;
     Parser(Scanner s){ this.s=s; }
+
+    String teste = "teste";
+    int count = 0;
+    int lines = 1;
+
+    boolean debug = false;
+    boolean error = false;
+    String descricao_erro = "";
+    
+    // tabela de símbolos
+    java.util.Map<String, Integer> simbolos = new java.util.HashMap<String, Integer>();
 :}
-
-/*
-start with programa;
-
-programa ::= 
-    definicaoCenarios configuracao testeCompleto actions
-    {: 
-        RESULT = new Programa(cenarios, configuracao, testeCompleto, actions);
-    :}
-;
-*/
 
 /* conectar esse parser ao scanner! */
 init with {:  :};
-scan with {: return s.next_token(); :};
+scan with {:
+    // debug 
+    Symbol token = s.next_token();
+    // String token_str = token.toString();
+    
+    // String token_str = token.value.toString();
+    // String token_str = token.value.toString();
+
+    // se token.value for null, então token_str = token.toString()
+    String token_str = token.value == null ? token.toString() : token.value.toString();
+
+    System.out.println("Token: " + token_str);
+    System.out.println("Error: " + error);
+
+    if(error){
+        error = false;
+       System.out.println("---"+descricao_erro+"---");
+    }
+    // return s.next_token(); 
+    return token; 
+:};
 
 /* Terminals */
 terminal LBRACE, RBRACE;             // { }
+terminal LBRACKET, RBRACKET;         // [ ]
 terminal EQUALS;                     // =
 terminal SEMICOLON;                  // ;
 terminal LPAREN, RPAREN;             // ( )
-terminal String  STRING_LITERAL;     // "..."
-terminal String  BLOCK_TYPE;         // definicao_de_*
+terminal String STRING_LITERAL;     // "qualquer coisa"
+terminal String IDENTIFICADOR;      // identificador = "valor"
+terminal String BLOCK;              // definicao_de_{block}
+
+terminal NOME, BLOCK_TYPE_ACOES, BLOCK_TYPE_RESULTADOS, BLOCK_TYPE_CENARIOS, BLOCK_TYPE_TESTE, BLOCK_TYPE_CONFIGURACAO;
+
+terminal LINHA, IDENTIFICADOR_ACAO_TIPO, ACOES_CENARIO, IDENTIFICADOR_ACAO, IDENTIFICADOR_BROWSER, IDENTIFICADOR_TESTE, IDENTIFICADOR_AMBIENTE, IDENTIFICADOR_CENARIOS_TESTE, IDENTIFICADOR_URL_BASE, IDENTIFICADOR_CENARIO, IDENTIFICADOR_RESULTADO, IDENTIFICADOR_CONFIGURACAO_TESTE, DADOS_ENTRADA_CENARIO, RESULTADOS_ESPERADOS_CENARIO;
+
+/* Non terminals para blocos principais */
+non terminal input;
+non terminal Programa programa;
+non terminal HashMap<String, String> chave_valor;
+non terminal List<HashMap<String, String>> chaves_valor;
+//non terminal bloco_de_configuração;
+non terminal bloco_generico;
+non terminal inicio;
+
+/* Gramática */
+
+inicio ::= inicio input:e
+    | input:e;
 
 
-terminal String IDENTIFICADOR_ACAO; // Identificador de ação
-terminal String IDENTIFICADOR_ACAO_TIPO; // Identificador do tipo de acao
-terminal String BLOCK_TYPE_ACTION;   // Bloco de ações
-terminal String BLOCK_TYPE_CENARIOS;  // Bloco de cenários  
-terminal String BLOCK_TYPE_CONFIGURACAO; // Bloco de configuração
-
-terminal String  NOME;                             // Identificador de nome genérico
-
-terminal String  IDENTIFICADOR_CENARIO;            // Identificador de cenario
-terminal String  CENARIO_ACOES;                    // Identificador de cenario
-terminal String  RESULTADOS_ESPERADOS;             // Identificador RESULTADOS_ESPERADOS de cenario
-terminal String  CENARIO_DADOS_ENTRADA;            // Identificador de cenario
-
-terminal String  DADOS_ENTRADA;                    // Identificador de dados de entrada
-terminal String  ACOES;                            // Identificador de ações
-
-terminal String  IDENTIFIER;                // Identificador válido
-
-/* Não terminais */
-non terminal Object             block;
-non terminal List<Object>       blocks;
-non terminal Object             block_content;
-non terminal List<Object>       block_contents;
-non terminal Object             entry;
-non terminal Object             action_def;
-/*non terminal List<Object>       actions; */
-non terminal List<Action>       actions;
-non terminal String             parameter;
-non terminal List<Parameter>    parameters;
-
-non terminal Object             cenario;
-// non terminal List<Cenario>      cenarios;
-
-non terminal List<Action>       acoesCenario;
-non terminal List<Action>       definicao_de_acoes;
-non terminal List<Action>       lista_acoes_definicao;
-
-// CENARIO INICIO
-non terminal HashMap<String, String> DadosEntrada;
-non terminal HashMap<String, String> parametrosDadosEntrada;
-non terminal HashMap<String, String> BlocoAcoesCenario;
-non terminal HashMap<String, String> BlocoResultadosEsperados;
-// CENARIO FIM
-
-non terminal Configuracao       configuracao; // HashMap passando para a classe Programa
-                                              // Ou instancia como uma classe e passa pra classe Programa
-
-non terminal HashMap<String, String> acao;
+// TESTE => Esse aqui é para armazenar um conjunto de chave valores. A gente precisa de um Blocks.
+// input ::= LBRACKET chaves_valor:cv RBRACKET
+//     {: 
+//         System.out.println("Parsed input: " + cv);
+//         RESULT = cv;
+//     :}
+// ;
 
 
-// CONFIGURAÇÔES INICIO
-
-/*
-definicao_de_configuracao {
-    ambiente = "teste";
-    url_base = "https://www.example.com/";
-}
-*/
-
-configuracao ::= 
-    BLOCK_TYPE_CONFIGURACAO LBRACE 
-        IDENTIFIER:key EQUALS STRING_LITERAL:value SEMICOLON
-        {:
-            System.out.println("Bloco de configuração reconhecido!");
-            // Adiciona a nova chave e valor ao mapa existente
-            paramsConfiguracao.put(key, value);
-            RESULT = paramsConfiguracao;
-        :}
-        |
-        IDENTIFIER:key EQUALS STRING_LITERAL:value SEMICOLON
-        {:
-            System.out.println("Bloco de configuração reconhecido!");
-            // Cria um novo mapa e adiciona o primeiro par chave-valor
-            HashMap<String, String> paramsConfiguracao = new HashMap<>();
-
-            paramsConfiguracao.put(key, value);
-            RESULT = paramsConfiguracao;
-        :}
-    RBRACE
-    {:
-        System.out.println("Bloco de configuração reconhecido!");
-    :}
-;
-// CONFIGURAÇÔES FIM
-
-
-// @todo - Arrancar fora o BLOCK_TYPE
-
-/* Main block structure */
-/*
-block ::= 
-    BLOCK_TYPE:type IDENTIFIER:name LBRACE block_contents:contents RBRACE
+// Adicionar agora o bloco de configuração ao input também
+input ::= LBRACKET bloco_generico:cv RBRACKET
     {: 
-        RESULT = new Block(type, name, contents); 
+        System.out.println("Parsed input: " + cv);
+        RESULT = cv;
     :}
-    |
-    BLOCK_TYPE:type LBRACE block_contents:contents RBRACE
+    | LBRACKET chaves_valor:cv RBRACKET
     {: 
-        RESULT = new Block(type, null, contents); 
-    :}
-;
-*/
-
-
-// bloco de acao_
-acao ::= 
-    IDENTIFICADOR_ACAO:name LBRACE 
-        IDENTIFICADOR_ACAO_TIPO:type EQUALS STRING_LITERAL:tipo SEMICOLON
-        {:
-            // acao sem parametro
-            System.out.println("Bloco de ações reconhecido!");
-
-            HashMap<String, String> acao = new HashMap<>();
-            acao.put("name", name);
-            acao.put("tipo", tipo);
-            RESULT = acao;
-        :}
-        /*
-        |
-        IDENTIFICADOR_ACAO:name LBRACE 
-            IDENTIFICADOR_ACAO_TIPO:type EQUALS STRING_LITERAL:tipo SEMICOLON
-            {:
-                // vai ter parametro
-                System.out.println("Bloco de ações reconhecido!");
-
-                HashMap<String, String> acao = new HashMap<>();
-                acao.put("name", name);
-                acao.put("tipo", tipo);
-                RESULT = acao;
-            :}
-        { / Outras ações opcionais podem ser adicionadas aqui / }
-    {: 
-        RESULT = new Action(name);
-    :}
-    */
-;
-
-/* Bloco de definição de ações */
-definicao_de_acoes ::= 
-    BLOCK_TYPE_ACTION LBRACE lista_acoes_definicao:actions RBRACE
-    {: 
-        System.out.println("Bloco de definição de ações processado: " + actions);
-        RESULT = actions; 
-    :}
-;
-
-/* Lista de ações */
-lista_acoes_definicao ::= 
-    lista_acoes_definicao:actions acao:action
-    {: 
-        System.out.println("Adicionando ação à lista existente: " + action);
-        actions.add(action);
-        System.out.println("Lista atual de ações: " + actions);
-        RESULT = actions; 
-    :}
-    |
-    acao:action
-    {: 
-        System.out.println("Criando nova lista de ações com a primeira ação: " + action);
-        List<Action> actions = new ArrayList<>();
-        actions.add(action);
-        System.out.println("Lista inicial de ações: " + actions);
-        RESULT = actions; 
+        System.out.println("Parsed input: " + cv);
+        RESULT = cv;
     :}
 ;
 
 
-// bloco de cenario
-cenario ::= 
-    IDENTIFICADOR_CENARIO:name LBRACE
-        NOME EQUALS STRING_LITERAL:nome SEMICOLON
-        DadosEntrada:dadosEntrada
-        BlocoAcoesCenario:acoesCenario
-        BlocoResultadosEsperados:resultadosEsperados
-        {:
-            System.out.println("Bloco de cenário reconhecido!");
-            cenarios.add(new Cenario(name, dadosEntrada, acoesCenario, resultadosEsperados));
-        :}
-;
+// INICIO BLOCO DE CONFIGURAÇÃO
+// EXEMPLO:
+// definicao_de_configuracao {
+//     ambiente = "teste";
+//     url_base = "https://www.example.com/";
+//     browser = "chrome";
+// }
 
-
-/*
-Exemplo BlocoAcoesCenario
-        acoes = {
-            acessar_tela_login();
-            preencher_campo_usuario(usuario);
-            preencher_campo_senha(senha);
-            clicar_botao_login();
-        };
-*/
-
-BlocoAcoesCenario ::= 
-    ACOES EQUALS LBRACE 
-        IDENTIFIER:name LPAREN RPAREN SEMICOLON
-        {:
-
-            paramsTeste1 = new ArrayList<>();
-            // acao sem parametro
-            // System.out.println("Bloco de ações reconhecido!");
-
-            HashMap<String, String> acao = new HashMap<>();
-            acao.put("name", name);
-            acao.put("params", paramsTeste1);
-            RESULT = acao;
-        :}
-        |
-        IDENTIFIER:name LPAREN IDENTIFIER:paramsTeste3 RPAREN SEMICOLON 
-        {:
-            // vai ter parametro
-            // System.out.println("Bloco de ações reconhecido!");
-            
-            paramsTeste2 = new ArrayList<>();
-
-            HashMap<String, String> acao = new HashMap<>();
-            acao.put("name", name);
-            acao.put("params", paramsTeste2);
-            RESULT = acao;
-        :}
-    RBRACE 
-    {: System.out.println("Bloco de ações reconhecido!"); :};
-
-/* exemplo DadosEntrada:
-    dados_entrada = {
-        usuario = "usuario@example.com";
-        senha = "senha123";
-    };
-*/
-
-DadosEntrada ::= 
-    DADOS_ENTRADA EQUALS LBRACE 
-        parametrosDadosEntrada:paramsDadosEntrada
-    RBRACE 
-    {:
-        // Cria o mapa de dados de entrada diretamente do resultado dos parâmetros
-        RESULT = paramsDadosEntrada;
-    :}
-;
-
-parametrosDadosEntrada ::= 
-    parametrosDadosEntrada:paramsEntrada IDENTIFIER:key EQUALS STRING_LITERAL:value SEMICOLON
-    {:
-        // Adiciona a nova chave e valor ao mapa existente
-        paramsEntrada.put(key, value);
-        RESULT = paramsEntrada;
-    :}
-    |
-    IDENTIFIER:key EQUALS STRING_LITERAL:value SEMICOLON
-    {:
-        // Cria um novo mapa e adiciona o primeiro par chave-valor
-        HashMap<String, String> paramsEntrada = new HashMap<>();
-
-        paramsEntrada.put(key, value);
-        RESULT = paramsEntrada;
-    :}
-;
-
-/*
-        resultados = {
-            tela_principal_deve_estar_visivel();
-            mensagem_de_bem_vindo_deve_ser_exibida();
-        };
-*/
-
-BlocoResultadosEsperados ::= 
-    RESULTADOS_ESPERADOS EQUALS LBRACE 
-        IDENTIFIER LPAREN RPAREN SEMICOLON 
-        IDENTIFIER LPAREN RPAREN SEMICOLON 
-    RBRACE 
-    {:
-        System.out.println("Bloco de resultados esperados reconhecido!");
-    :}
-;
-
-/* Block contents can be nested blocks, entries, or actions */
-block_contents ::= 
-    block_contents:list block_content:content
+bloco_generico ::= BLOCK:bloco LBRACE chaves_valor:cv RBRACE
     {: 
-        list.add(content);
-        RESULT = list; 
-    :}
-    |
-    block_content:content
-    {: 
-        List<Object> list = new ArrayList<>();
-        list.add(content);
-        RESULT = list; 
+        System.out.println("Bloco: " + bloco + ", Chaves e valores: " + cv);
+
+        // Converte a lista de HashMaps em um único HashMap
+        HashMap<String, String> result = new HashMap<>();
+        for (HashMap<String, String> map : cv) {
+            result.putAll(map); // Adiciona todas as entradas de cada HashMap na lista
+        }
+
+        // Adiciona o bloco como chave especial, se necessário
+        result.put("block_type", bloco);
+
+        RESULT = result;
     :}
 ;
 
-/* Block content can be another block, an entry, or an action */
-block_content ::=
-    block:b
-    {: RESULT = b; :}
-    |
-    entry:e
-    {: RESULT = e; :}
-    |
-    action_def:a
-    {: RESULT = a; :}
-;
 
-/* Simple key-value entry */
-entry ::= 
-    IDENTIFIER:key EQUALS STRING_LITERAL:value SEMICOLON
+// chave valor.
+// identificador = "valor";
+chave_valor ::= IDENTIFICADOR:chave EQUALS STRING_LITERAL:valor SEMICOLON
     {: 
-        RESULT = new Entry(key, value); 
+        HashMap<String, String> map = new HashMap<>();
+        map.put(chave, valor);
+        System.out.println("Chave: " + chave + ", Valor: " + valor);
+        RESULT = map;
     :}
 ;
 
-/* Action with optional parameters */
-action_def ::=
-    IDENTIFIER:name LPAREN parameters:paramsActionDef RPAREN SEMICOLON
+// Chave valor recursivo, armazenando um array de hashmaps ou nao
+chaves_valor ::= chave_valor:cv
     {: 
-        RESULT = new Action(name);
+        System.out.println("Chave: " + cv.keySet().toArray()[0] + ", Valor: " + cv.values().toArray()[0]);
+        List<HashMap<String, String>> list = new ArrayList<>();
+        list.add(cv);
+        RESULT = list;
     :}
-    |
-    IDENTIFIER:name LPAREN RPAREN SEMICOLON
+    | chaves_valor:cv chave_valor:cv2
     {: 
-        RESULT = new Action(name); 
-    :}
-;
-
-/* Parameter list */
-parameters ::=
-    parameters:list IDENTIFIER:param
-    {: 
-        list.add(new Parameter(param));
-        RESULT = list; 
-    :}
-    |
-    IDENTIFIER:param
-    {: 
-        List<Parameter> list = new ArrayList<>();
-        list.add(new Parameter(param));
-        RESULT = list; 
+        System.out.println("Chave: " + cv2.keySet().toArray()[0] + ", Valor: " + cv2.values().toArray()[0]);
+        List<HashMap<String, String>> list = new ArrayList<>();
+        list.addAll(cv);
+        list.add(cv2);
+        RESULT = list;
     :}
 ;
