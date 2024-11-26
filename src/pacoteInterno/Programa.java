@@ -20,39 +20,50 @@ public final class Programa {
             String blockType = (String) bloco.get("block_type");
             if (blockType.equals("configuracao")) {
                 Object content = bloco.get("content");
-                
-                if (content instanceof HashMap) {
-                    // Caso o conteúdo seja um HashMap
-                    HashMap<String, Object> config = (HashMap<String, Object>) content;
-                    String ambiente = (String) config.get("ambiente");
-                    String urlBase = (String) config.get("url_base");
-                    String browser = (String) config.get("browser");
-                    
-                    // Aqui você pode configurar o ambiente de teste com essas informações
+    
+                // Verifique se o conteúdo é uma lista
+                if (content instanceof ArrayList) {
+                    ArrayList<HashMap<String, Object>> contentList = (ArrayList<HashMap<String, Object>>) content;
+                    HashMap<String, Object> configMap = new HashMap<>();
+    
+                    // Mescla todos os HashMap dentro da lista em um único HashMap
+                    for (HashMap<String, Object> map : contentList) {
+                        configMap.putAll(map);  // Adiciona as chaves e valores do HashMap atual ao configMap
+                    }
+    
+                    // Agora, 'configMap' contém todos os valores combinados da lista
+                    System.out.println("========================================");
+                    System.out.println(configMap);  // Exibe o HashMap combinado
+                    System.out.println("========================================");
+    
+                    // Exemplo de uso: acessar as informações
+                    String ambiente = (String) configMap.get("ambiente");
+                    String urlBase = (String) configMap.get("url_base");
+                    String browser = (String) configMap.get("browser");
+    
                     System.out.println("Ambiente: " + ambiente);
                     System.out.println("URL base: " + urlBase);
                     System.out.println("Navegador: " + browser);
-                } else if (content instanceof ArrayList) {
-                    // Caso o conteúdo seja um ArrayList, vamos tentar convertê-lo para HashMap
-                    ArrayList<Object> contentList = (ArrayList<Object>) content;
-                    HashMap<String, Object> configMap = new HashMap<>();
-                    
-                    // Verifique se a lista contém dados suficientes para mapear para um HashMap
-                    if (contentList.size() >= 3) {
-                        configMap.put("ambiente", contentList.get(0));
-                        configMap.put("url_base", contentList.get(1));
-                        configMap.put("browser", contentList.get(2));
-                        
-                        // Exibe as informações convertidas
-                        System.out.println("Ambiente: " + configMap.get("ambiente"));
-                        System.out.println("URL base: " + configMap.get("url_base"));
-                        System.out.println("Navegador: " + configMap.get("browser"));
-                    } else {
-                        System.err.println("Content list does not contain enough elements to form a valid configuration.");
-                    }
+    
+                    // Processa o bloco de configuração para setup do driver
+                    processConfigurationBlock(browser);
                 } else {
-                    System.err.println("Expected content to be either a HashMap or ArrayList but found: " + content.getClass().getName());
+                    System.err.println("O conteúdo não é uma lista, mas sim de tipo: " + content.getClass().getName());
                 }
+            }
+        }
+    }
+    
+    // Método para processar o bloco de configuração e definir o driver
+    private void processConfigurationBlock(String browser) {
+        if (browser != null) {
+            switch (browser.toLowerCase()) {
+                case "chrome":
+                    this.python_code += "\n# Configuração do Selenium para o Chrome\n";
+                    this.python_code += "driver = webdriver.Chrome()\n";
+                    break;
+                default:
+                    System.err.println("Navegador não suportado: " + browser);
             }
         }
     }
@@ -77,7 +88,7 @@ public final class Programa {
                 "teste_completo",
                 "acoes",
                 "resultados",
-                "configuracao",
+                "configuracao", // OK
                 "resultados_cenario"
         );
 
@@ -124,7 +135,6 @@ public final class Programa {
         return "Programa{" +
                 "blocos=" + blocos +
                 '}'
-                + "\n\nCódigo Python gerado:\n\n" + python_code
-                ;
+                + "\n\nCódigo Python gerado:\n\n" + python_code;
     }
 }
