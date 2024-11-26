@@ -48,6 +48,8 @@ resultado_{identificador}     { return new Symbol(Tokens.BLOCK, yytext()); }
 cenarios_{identificador}      { return new Symbol(Tokens.BLOCK, yytext()); }
 dados_{identificador}         { return new Symbol(Tokens.BLOCK, yytext()); }
 acoes                         { return new Symbol(Tokens.BLOCK, yytext()); }
+resultados                    { return new Symbol(Tokens.BLOCK, yytext()); }
+cenarios                      { return new Symbol(Tokens.BLOCK, yytext()); }
 
 // Identificadores internos de cenário
 // "dados_entrada"              { return new Symbol(Tokens.DADOS_ENTRADA_CENARIO, yytext()); }
@@ -85,6 +87,7 @@ acoes                         { return new Symbol(Tokens.BLOCK, yytext()); }
 /* Identificadores */
 \"[^\"]*\"                  { return new Symbol(Tokens.STRING_LITERAL,yytext().substring(1, yytext().length()-1)); }
 {identificador}             { return new Symbol(Tokens.IDENTIFICADOR, yytext()); }
+{digito}+                   { return new Symbol(Tokens.NUMERAL, yytext()); }
 
 /* Espaços em branco */
 {espaco}+                   { /* Ignora espaços em branco */ }

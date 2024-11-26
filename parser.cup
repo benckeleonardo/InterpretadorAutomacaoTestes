@@ -55,6 +55,7 @@ terminal SEMICOLON;                  // ;
 terminal LPAREN, RPAREN;             // ( )
 terminal String STRING_LITERAL;     // "qualquer coisa"
 terminal String IDENTIFICADOR;      // identificador = "valor"
+terminal String NUMERAL;            // 123
 terminal String BLOCK;              // definicao_de_{block}
 
 terminal NOME, BLOCK_TYPE_ACOES, BLOCK_TYPE_RESULTADOS, BLOCK_TYPE_CENARIOS, BLOCK_TYPE_TESTE, BLOCK_TYPE_CONFIGURACAO;
@@ -211,6 +212,13 @@ chave_valor ::= IDENTIFICADOR:chave EQUALS STRING_LITERAL:valor SEMICOLON
         HashMap<String, String> map = new HashMap<>();
         map.put(chave, valor);
         System.out.println("Chave: " + chave + ", Valor: " + valor);
+        RESULT = map;
+    :}
+    | NUMERAL:chave EQUALS STRING_LITERAL:valor SEMICOLON
+    {: 
+        HashMap<String, String> map = new HashMap<>();
+        map.put(String.valueOf(chave), valor); // Converta o NUMERAL para String
+        System.out.println("Chave (numérica): " + chave + ", Valor: " + valor);
         RESULT = map;
     :}
 ;
