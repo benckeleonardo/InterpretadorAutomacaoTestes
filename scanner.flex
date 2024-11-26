@@ -40,10 +40,14 @@ identificador = [a-zA-Z][a-zA-Z0-9_]*
 definicao_de_{identificador}  { return new Symbol(Tokens.BLOCK, yytext().substring(13)); }
 
 // Identificador de cenario (procura string cenario_[a-zA-Z0-9_]* { )
-cenario_{identificador}       { return new Symbol(Tokens.IDENTIFICADOR_CENARIO, yytext()); }
-acao_{identificador}          { return new Symbol(Tokens.IDENTIFICADOR_ACAO, yytext()); }
-teste_{identificador}         { return new Symbol(Tokens.IDENTIFICADOR_TESTE, yytext()); }
-resultado_{identificador}     { return new Symbol(Tokens.IDENTIFICADOR_RESULTADO, yytext()); }
+// cenario_{identificador}       { return new Symbol(Tokens.IDENTIFICADOR_CENARIO, yytext()); }
+cenario_{identificador}       { return new Symbol(Tokens.BLOCK, yytext()); }
+acao_{identificador}          { return new Symbol(Tokens.BLOCK, yytext()); }
+teste_{identificador}         { return new Symbol(Tokens.BLOCK, yytext()); }
+resultado_{identificador}     { return new Symbol(Tokens.BLOCK, yytext()); }
+cenarios_{identificador}      { return new Symbol(Tokens.BLOCK, yytext()); }
+dados_{identificador}         { return new Symbol(Tokens.BLOCK, yytext()); }
+acoes                         { return new Symbol(Tokens.BLOCK, yytext()); }
 
 // Identificadores internos de cenário
 // "dados_entrada"              { return new Symbol(Tokens.DADOS_ENTRADA_CENARIO, yytext()); }
@@ -58,13 +62,14 @@ resultado_{identificador}     { return new Symbol(Tokens.IDENTIFICADOR_RESULTADO
 // Identificadores internos de Teste
 // "configuracao"   { return new Symbol(Tokens.IDENTIFICADOR_CONFIGURACAO_TESTE, yytext()); }
 // "cenarios"       { return new Symbol(Tokens.IDENTIFICADOR_CENARIOS_TESTE, yytext()); }
+// "cenarios"       { return new Symbol(Tokens.STRING_LITERAL, yytext()); }
 
 // Identificadores internos de Ação
 // "tipo"                       { return new Symbol(Tokens.IDENTIFICADOR_ACAO_TIPO, yytext()); }
 
 
 // Identificador genérico de nome
-"nome"              { return new Symbol(Tokens.NOME, yytext()); }
+// "nome"              { return new Symbol(Tokens.NOME, yytext()); }
 
 /* operadores */
 "{"                          { return new Symbol(Tokens.LBRACE); }

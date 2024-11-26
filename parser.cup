@@ -36,7 +36,7 @@ scan with {:
     // se token.value for null, então token_str = token.toString()
     String token_str = token.value == null ? token.toString() : token.value.toString();
 
-    System.out.println("Token: " + token_str);
+    System.out.println("Token: " + token_str + " - " + token.sym);
     System.out.println("Error: " + error);
 
     if(error){
@@ -64,16 +64,41 @@ terminal LINHA, IDENTIFICADOR_ACAO_TIPO, ACOES_CENARIO, IDENTIFICADOR_ACAO, IDEN
 /* Non terminals para blocos principais */
 non terminal input;
 non terminal Programa programa;
-non terminal HashMap<String, String> chave_valor;
+
+/* Um par chave-valor simples */
+// non terminal HashMap<String, String> chave_valor;
+
+/* Uma lista de pares chave-valor */
 non terminal List<HashMap<String, String>> chaves_valor;
-non terminal HashMap<String, String> bloco_generico;
-non terminal List<HashMap<String, String>> blocos_genericos;
+
+/* Um bloco genérico com conteúdo misto */
+// non terminal HashMap<String, Object> bloco_generico;
+
+/* Conteúdo de um bloco (misto: chave-valor ou outros blocos) */
+non terminal List<Object> conteudo_bloco_aninhado;
+
+/* Lista de blocos aninhados ou genéricos */
+non terminal List<HashMap<String, Object>> blocos_genericos_ou_aninhados;
+
+/* Estruturas para armazenar dados */
+non terminal HashMap<String, Object> bloco_generico;   // Blocos genéricos com chaves e valores ou outros blocos
+non terminal HashMap<String, String> chave_valor;      // Um par chave-valor
+non terminal List<Object> chaves_valor_ou_blocos;      // Lista combinada de chave-valor e blocos
+non terminal List<HashMap<String, Object>> blocos_genericos; // Lista de blocos
+
+non terminal HashMap<String, String> acao;
+
+
 non terminal inicio;
 
 /* Gramática */
 
-inicio ::= inicio input:e
-    | input:e;
+inicio ::= LBRACKET blocos_genericos:blocos RBRACKET
+    {: 
+        System.out.println("Programa final com blocos: " + blocos);
+        RESULT = blocos; 
+    :}
+;
 
 
 // TESTE => Esse aqui é para armazenar um conjunto de chave valores. A gente precisa de um Blocks.
@@ -101,34 +126,80 @@ input ::= LBRACKET blocos_genericos:bl RBRACKET
 //     browser = "chrome";
 // }
 
-bloco_generico ::= BLOCK:bloco LBRACE chaves_valor:cv RBRACE
+/* Bloco genérico */
+// Bloco genérico com suporte para aninhamento
+bloco_generico ::= BLOCK:bloco LBRACE chaves_valor_ou_blocos:conteudo RBRACE
     {: 
-        System.out.println("Bloco: " + bloco + ", Chaves e valores: " + cv);
-
-        // Converte a lista de HashMaps em um único HashMap
-        HashMap<String, String> result = new HashMap<>();
-        for (HashMap<String, String> map : cv) {
-            result.putAll(map); // Adiciona todas as entradas de cada HashMap na lista
-        }
-
-        // Adiciona o bloco como chave especial, se necessário
-        result.put("block_type", bloco);
-
-        RESULT = result;
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("block_type", bloco);
+        map.put("content", conteudo);
+        RESULT = map;
     :}
 ;
 
-// Produções para blocos genéricos
-blocos_genericos ::= bloco_generico:bg
+/* Conteúdo de um bloco (misto) */
+conteudo_bloco_aninhado ::= chave_valor:cv
     {: 
-        List<HashMap<String, String>> list = new ArrayList<>();
+        List<Object> conteudo = new ArrayList<>();
+        conteudo.add(cv); // Adiciona um par chave-valor
+        RESULT = conteudo;
+    :}
+    | conteudo_bloco_aninhado:conteudo chave_valor:cv
+    {: 
+        conteudo.add(cv); // Adiciona mais pares chave-valor
+        RESULT = conteudo;
+    :}
+    | bloco_generico:bg
+    {: 
+        List<Object> conteudo = new ArrayList<>();
+        conteudo.add(bg); // Adiciona um bloco
+        RESULT = conteudo;
+    :}
+    | conteudo_bloco_aninhado:conteudo bloco_generico:bg
+    {: 
+        conteudo.add(bg); // Adiciona mais blocos
+        RESULT = conteudo;
+    :}
+;
+
+// Conteúdo de um bloco pode ser chave-valor ou outros blocos
+chaves_valor_ou_blocos ::= chave_valor:cv
+    {: 
+        List<Object> list = new ArrayList<>();
+        list.add(cv);
+        RESULT = list;
+    :}
+    | bloco_generico:bg
+    {: 
+        List<Object> list = new ArrayList<>();
         list.add(bg);
         RESULT = list;
     :}
-    | blocos_genericos:lista bloco_generico:bg
+    | chaves_valor_ou_blocos:cvb chave_valor:cv
     {: 
-        lista.add(bg);
-        RESULT = lista;
+        List<Object> list = new ArrayList<>(cvb);
+        list.add(cv);
+        RESULT = list;
+    :}
+    | chaves_valor_ou_blocos:cvb bloco_generico:bg
+    {: 
+        List<Object> list = new ArrayList<>(cvb);
+        list.add(bg);
+        RESULT = list;
+    :}
+;
+
+blocos_genericos ::= bloco_generico:bloco
+    {: 
+        List<HashMap<String, Object>> list = new ArrayList<>();
+        list.add(bloco);
+        RESULT = list;
+    :}
+    | blocos_genericos:blocos bloco_generico:bloco
+    {: 
+        List<HashMap<String, Object>> list = new ArrayList<>(blocos);
+        list.add(bloco);
+        RESULT = list;
     :}
 ;
 

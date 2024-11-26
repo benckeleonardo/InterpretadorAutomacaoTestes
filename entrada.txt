@@ -1,12 +1,23 @@
 [
-    definicao_de_configuracao {
-        ambiente = "teste";
-        url_base = "teste";
-        browser = "chrome";
+    definicao_de_cenarios {
+        cenario_login {
+            nome = "Login de usuário válido";
+            dados_entrada {
+                usuario = "usuario@example.com";
+                senha = "senha123";
+            }
+            acoes {
+                acessar_tela_login = "";
+                preencher_campo_usuario = "usuario";
+                preencher_campo_senha = "senha";
+                clicar_botao_login = "";
+            }
+        }
     }
 
-    definicao_de_teste_completo {
-        teste = "Suite de testes de login";
-        configuracao = "teste";
+    definicao_de_configuracao {
+        ambiente = "teste";
+        url_base = "https://www.example.com/";
+        browser = "chrome";
     }
 ]
