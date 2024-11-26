@@ -38,8 +38,8 @@
             valor_seletor = "input-usuario";
         }
         acao_preencher_campo_senha {
-            param = "senha";
             tipo = "input";
+            param = "senha";
             seletor = "id";
             valor_seletor = "input-senha";
         }
