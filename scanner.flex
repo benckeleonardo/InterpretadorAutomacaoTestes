@@ -40,7 +40,7 @@ resultado_{identificador}     { return new Symbol(Tokens.BLOCO, yytext()); }
 cenarios_{identificador}      { return new Symbol(Tokens.BLOCO, yytext()); }
 dados_{identificador}         { return new Symbol(Tokens.BLOCO, yytext()); }
 acoes                         { return new Symbol(Tokens.BLOCO, yytext()); }
-resultados                    { return new Symbol(Tokens.BLOCO, yytext()); }
+resultados_cenario            { return new Symbol(Tokens.BLOCO, yytext()); }
 cenarios                      { return new Symbol(Tokens.BLOCO, yytext()); }
 
 /* Operadores */

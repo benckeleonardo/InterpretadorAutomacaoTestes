@@ -12,7 +12,7 @@
                 preencher_campo_senha = "senha";
                 clicar_botao_login = "";
             }
-            resultados {
+            resultados_cenario {
                 tela_principal_deve_estar_visivel = "";
                 mensagem_de_bem_vindo_deve_ser_exibida = "";
             }

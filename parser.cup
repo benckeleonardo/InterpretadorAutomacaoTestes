@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import myPackage.Programa; // classe que vai guardar os blocos de ação e cenários, pra gerar o código final
+import pacoteInterno.Programa; // classe que vai guardar os blocos de ação e cenários, pra gerar o código final
 
 parser code {:
     // conectar esse parser ao scanner!
@@ -77,7 +77,9 @@ non terminal inicio;
 inicio ::= LBRACKET blocos_genericos:blocos RBRACKET
     {: 
         System.out.println("Programa final com blocos: " + blocos);
-        RESULT = blocos; 
+        Programa programa = new Programa(blocos);
+        System.out.println(programa.toString());
+        RESULT = programa;
     :}
 ;
 
@@ -88,7 +90,6 @@ input ::= LBRACKET blocos_genericos:bl RBRACKET
         RESULT = bl;
     :}
 ;
-
 
 /* Bloco genérico */
 bloco_generico ::= BLOCO:bloco LBRACE chaves_valor_ou_blocos:conteudo RBRACE
@@ -166,8 +167,7 @@ blocos_genericos ::= bloco_generico:bloco
     :}
 ;
 
-
-// chave valor.
+/* chave valor */
 // identificador = "valor";
 // 123 = "valor";
 chave_valor ::= IDENTIFICADOR:chave EQUALS STRING:valor SEMICOLON
@@ -180,26 +180,8 @@ chave_valor ::= IDENTIFICADOR:chave EQUALS STRING:valor SEMICOLON
     | NUMERAL:chave EQUALS STRING:valor SEMICOLON
     {: 
         HashMap<String, String> map = new HashMap<>();
-        map.put(String.valueOf(chave), valor); // Converta o NUMERAL para String
+        map.put(String.valueOf(chave), valor);
         System.out.println("Chave (numérica): " + chave + ", Valor: " + valor);
         RESULT = map;
-    :}
-;
-
-// Chave valor recursivo, armazenando um array de hashmaps ou nao
-chaves_valor ::= chave_valor:cv
-    {: 
-        System.out.println("Chave: " + cv.keySet().toArray()[0] + ", Valor: " + cv.values().toArray()[0]);
-        List<HashMap<String, String>> list = new ArrayList<>();
-        list.add(cv);
-        RESULT = list;
-    :}
-    | chaves_valor:cv chave_valor:cv2
-    {: 
-        System.out.println("Chave: " + cv2.keySet().toArray()[0] + ", Valor: " + cv2.values().toArray()[0]);
-        List<HashMap<String, String>> list = new ArrayList<>();
-        list.addAll(cv);
-        list.add(cv2);
-        RESULT = list;
     :}
 ;

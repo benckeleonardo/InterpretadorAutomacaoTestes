@@ -7,7 +7,7 @@ import java_cup.runtime.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
-import myPackage.Programa;
+import pacoteInterno.Programa;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -33,12 +33,12 @@ public class Parser extends java_cup.runtime.lr_parser {
   /** Production table. */
   protected static final short _production_table[][] = 
     unpackFromStrings(new String[] {
-    "\000\022\000\002\012\005\000\002\002\004\000\002\002" +
+    "\000\020\000\002\012\005\000\002\002\004\000\002\002" +
     "\005\000\002\006\006\000\002\005\003\000\002\005\004" +
     "\000\002\005\003\000\002\005\004\000\002\010\003\000" +
     "\002\010\003\000\002\010\004\000\002\010\004\000\002" +
     "\011\003\000\002\011\004\000\002\007\006\000\002\007" +
-    "\006\000\002\004\003\000\002\004\004" });
+    "\006" });
 
   /** Access to production table. */
   public short[][] production_table() {return _production_table;}
@@ -193,7 +193,9 @@ class CUP$Parser$actions {
 		List<HashMap<String,Object>> blocos = (List<HashMap<String,Object>>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		 
         System.out.println("Programa final com blocos: " + blocos);
-        RESULT = blocos; 
+        Programa programa = new Programa(blocos);
+        System.out.println(programa.toString());
+        RESULT = programa;
     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("inicio",8, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -453,49 +455,11 @@ class CUP$Parser$actions {
 		String valor = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		 
         HashMap<String, String> map = new HashMap<>();
-        map.put(String.valueOf(chave), valor); // Converta o NUMERAL para String
+        map.put(String.valueOf(chave), valor);
         System.out.println("Chave (numérica): " + chave + ", Valor: " + valor);
         RESULT = map;
     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("chave_valor",5, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
-            }
-          return CUP$Parser$result;
-
-          /*. . . . . . . . . . . . . . . . . . . .*/
-          case 16: // chaves_valor ::= chave_valor 
-            {
-              List<HashMap<String,String>> RESULT =null;
-		int cvleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
-		int cvright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		HashMap<String,String> cv = (HashMap<String,String>)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 
-        System.out.println("Chave: " + cv.keySet().toArray()[0] + ", Valor: " + cv.values().toArray()[0]);
-        List<HashMap<String, String>> list = new ArrayList<>();
-        list.add(cv);
-        RESULT = list;
-    
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("chaves_valor",2, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
-            }
-          return CUP$Parser$result;
-
-          /*. . . . . . . . . . . . . . . . . . . .*/
-          case 17: // chaves_valor ::= chaves_valor chave_valor 
-            {
-              List<HashMap<String,String>> RESULT =null;
-		int cvleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
-		int cvright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
-		List<HashMap<String,String>> cv = (List<HashMap<String,String>>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		int cv2left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
-		int cv2right = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		HashMap<String,String> cv2 = (HashMap<String,String>)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 
-        System.out.println("Chave: " + cv2.keySet().toArray()[0] + ", Valor: " + cv2.values().toArray()[0]);
-        List<HashMap<String, String>> list = new ArrayList<>();
-        list.addAll(cv);
-        list.add(cv2);
-        RESULT = list;
-    
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("chaves_valor",2, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 

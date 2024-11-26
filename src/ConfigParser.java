@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import java_cup.runtime.Symbol;
-import myPackage.Programa;
+import pacoteInterno.Programa;
 
 public class ConfigParser {
     public static void main(String[] args) throws Exception {
